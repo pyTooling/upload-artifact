@@ -1,0 +1,70 @@
+name: Upload (preserving) Artifact
+description: Tarball files before uploading the artifact to preserve file privileges.
+author: Patrick Lehmann (@Paebbels)
+
+inputs:
+  name:
+    description: "Name of the artifact."
+    type: string
+  path:
+    description: A list of file/directory pattern to be tarballed and uploaded as an artifact.
+    required: true
+    type: string
+#  if-no-files-found:
+#  retention-days:
+#  compression-level:
+  overwrite:
+    required: false
+    default: false
+    type: boolean
+#  include-hidden-files:
+  temp_directory:
+    required: false
+    default: '__upload_artifact__'
+    type: string
+
+outputs:
+  artifact-id:
+#    description: "Random number"
+    value: ${{ steps.upload.outputs.artifact-id }}
+  artifact-url:
+    value: ${{ steps.upload.outputs.artifact-url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Copy files based on pattern into a temporary directory for later tarballing
+      shell: bash
+      run: |
+        mkdir -p "${{ inputs.temp_directory }}"
+        while IFS=$'\r\n' read -r pattern; do
+          # skip empty lines
+          [[ "$pattern" == "" ]] && continue
+
+          cp -rv "${pattern}" "${{ inputs.temp_directory }}"
+        done <<<'${{ inputs.path }}'
+
+    - name: Inspect temporary directory
+      shell: bash
+      run: |
+        tree "${{ inputs.temp_directory }}"
+
+    - name: Create tarball
+      shell: bash
+      run: |
+        cd "${{ inputs.temp_directory }}"
+        tar -cvf artifact.tar *
+
+    # https://github.com/actions/upload-artifact
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      id: upload
+      with:
+        name: ${{ inputs.name }}
+        path: "${{ inputs.temp_directory }}/artifact.tar"
+        overwrite: ${{ inputs.overwrite }}
+
+    - name: Remove temporary directory
+      shell: bash
+      run: |
+        rm -Rf "${{ inputs.temp_directory }}"
