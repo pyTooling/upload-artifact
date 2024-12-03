@@ -18,10 +18,10 @@ inputs:
     default: false
     type: boolean
 #  include-hidden-files:
-  temp_directory:
-    required: false
-    default: '__upload_artifact__'
+  temp_tarball:
     type: string
+    required: false
+    default: '__upload_artifact__.tar'
 
 outputs:
   artifact-id:
@@ -33,27 +33,33 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Copy files based on pattern into a temporary directory for later tarballing
+    - name: Create tarball from given file patterns
+      id: prepare
       shell: bash
       run: |
-        mkdir -p "${{ inputs.temp_directory }}"
+        set +e
+
+        ANSI_LIGHT_RED="\e[91m"
+        ANSI_LIGHT_GREEN="\e[92m"
+        ANSI_NOCOLOR="\e[0m"
+
+        PATTERNS=()
         while IFS=$'\r\n' read -r pattern; do
-          # skip empty lines
-          [[ "$pattern" == "" ]] && continue
+          # skip empty or comment lines
+          [[ "${pattern}" == "" || "${pattern:0:1}" == "#" ]] && continue
 
-          cp -rv ${pattern} "${{ inputs.temp_directory }}"
+          PATTERNS+=($pattern)
         done <<<'${{ inputs.path }}'
-
-    - name: Inspect temporary directory
-      shell: bash
-      run: |
-        tree "${{ inputs.temp_directory }}"
-
-    - name: Create tarball
-      shell: bash
-      run: |
-        cd "${{ inputs.temp_directory }}"
-        tar -cvf artifact.tar *
+        
+        # echo "PATTERNS: ${PATTERNS[@]}"
+        
+        echo -n "Creating temporary tarball ... "
+        tar -cf "${{ inputs.temp_tarball }}" "${PATTERNS[@]}"
+        if [[ $? -ne 0 ]]; then
+          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        else
+          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        fi
 
     # https://github.com/actions/upload-artifact
     - name: Upload artifact
@@ -61,10 +67,23 @@ runs:
       id: upload
       with:
         name: ${{ inputs.name }}
-        path: "${{ inputs.temp_directory }}/artifact.tar"
+        path: ${{ inputs.temp_tarball }}
         overwrite: ${{ inputs.overwrite }}
 
-    - name: Remove temporary directory
+    - name: Remove temporary tarball
+      id: cleanup
       shell: bash
       run: |
-        rm -Rf "${{ inputs.temp_directory }}"
+        set +e
+
+        ANSI_LIGHT_RED="\e[91m"
+        ANSI_LIGHT_GREEN="\e[92m"
+        ANSI_NOCOLOR="\e[0m"
+        
+        echo -n "Removing temporary tarball ... "
+        rm -f "${{ inputs.temp_tarball }}"
+        if [[ $? -ne 0 ]]; then
+          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        else
+          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        fi

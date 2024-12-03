@@ -63,9 +63,9 @@ jobs:
           echo "----------------------------------------"
           
           echo -n "Does tarball exist ... "
-          if [[ ! -f artifact.tar ]]; then
+          if [[ ! -f __upload_artifact__.tar ]]; then
             echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named 'artifact.tar'.${ANSI_NOCOLOR}"
+            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__upload_artifact__.tar'.${ANSI_NOCOLOR}"
             exit 1
           else
             echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -80,7 +80,7 @@ jobs:
           ANSI_NOCOLOR="\e[0m"
           
           echo -n "Extracting tarball ... "
-          tar -xf artifact.tar
+          tar -xf __upload_artifact__.tar
           if [[ $? -ne 0 ]]; then
             echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           else
@@ -109,7 +109,11 @@ jobs:
 
           errors=0          
           for file in "${expected[@]}"; do
-            if [[ ! -f "$file" ]]; then
+            echo -n "Checking '${file}' ... "
+            if [[ -f "$file" ]]; then
+              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+            else
+              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
               echo -e "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
               errors=$((errors + 1))
             fi  
