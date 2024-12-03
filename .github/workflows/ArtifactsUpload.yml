@@ -6,7 +6,7 @@ on:
 
 jobs:
   Build:
-    name: Build something
+    name: Upload artifact
     runs-on: ubuntu-24.04
 
     steps:
@@ -21,6 +21,10 @@ jobs:
           
           mkdir -p lib
           echo "Library $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
+
+      - name: 🔎 Inspect directory structure
+        run: |
+          tree .
 
       - name: 📤 Upload artifact
         uses: pyTooling/upload-artifact@dev
@@ -37,6 +41,8 @@ jobs:
   Verify:
     name: Verify artifact content
     runs-on: ubuntu-24.04
+    needs:
+      - Build
 
     steps:
       - name: 📥 Download artifact
@@ -44,7 +50,7 @@ jobs:
         with:
           name: release
 
-      - name: 📥 Download artifact
+      - name: 🔎 Inspect downloaded artifact content
         run: |
           set +e
 
@@ -52,12 +58,20 @@ jobs:
           ANSI_LIGHT_GREEN="\e[92m"
           ANSI_NOCOLOR="\e[0m"
           
+          echo "List directory content"
+          ls -lAh . 
+          echo "----------------------------------------"
+          
+          echo -n "Does tarball exist ... "
           if [[ ! -f artifact.tar ]]; then
+            echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
             echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named 'artifact.tar'.${ANSI_NOCOLOR}"
             exit 1
+          else
+            echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
 
-      - name: 📦 Extract tarball and check content
+      - name: 📦 Extract tarball
         run: |
           set +e
 
@@ -66,12 +80,25 @@ jobs:
           ANSI_NOCOLOR="\e[0m"
           
           echo -n "Extracting tarball ... "
+          tar -xf artifact.tar
           if [[ $? -ne 0 ]]; then
             echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           else
             echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
-          
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+      - name: 📋 Verify extracted tarball content
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+
           expected=(
             "document1.txt"
             "analysis.log"

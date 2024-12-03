@@ -41,7 +41,7 @@ runs:
           # skip empty lines
           [[ "$pattern" == "" ]] && continue
 
-          cp -rv "${pattern}" "${{ inputs.temp_directory }}"
+          cp -rv ${pattern} "${{ inputs.temp_directory }}"
         done <<<'${{ inputs.path }}'
 
     - name: Inspect temporary directory
