@@ -29,7 +29,7 @@ jobs:
           tree .
 
       - name: 📤 Upload artifact
-        uses: pyTooling/upload-artifact@dev
+        uses: pyTooling/upload-artifact@main
         with:
           name: release
           path: |
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@dev
         with:
           name: release
 
@@ -124,6 +124,7 @@ jobs:
           echo ""
           if [[ $errors -ne 0 ]]; then
             echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+            exit 1
           else
             echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
           fi
@@ -156,6 +157,7 @@ jobs:
           echo ""
           if [[ $errors -ne 0 ]]; then
             echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+            exit 1
           else
             echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
           fi
