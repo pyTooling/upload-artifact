@@ -29,7 +29,7 @@ jobs:
           tree .
 
       - name: 📤 Upload artifact
-        uses: pyTooling/upload-artifact@main
+        uses: pyTooling/upload-artifact@v4
         with:
           name: release
           path: |
