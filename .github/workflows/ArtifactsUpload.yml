@@ -18,9 +18,11 @@ jobs:
           
           mkdir -p bin
           echo "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > bin/program.py
+          chmod u+x bin/program.py
           
           mkdir -p lib
           echo "Library $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
+          chmod +x lib/common.py
 
       - name: 🔎 Inspect directory structure
         run: |
@@ -115,6 +117,38 @@ jobs:
             else
               echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
               echo -e "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
+              errors=$((errors + 1))
+            fi  
+          done
+          
+          echo ""
+          if [[ $errors -ne 0 ]]; then
+            echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          else
+            echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+          fi
+
+      - name: 📋 Verify file permissions
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+
+          expected=(
+            "bin/program.py"
+            "lib/common.py"
+          )
+
+          errors=0          
+          for file in "${expected[@]}"; do
+            echo -n "Checking '${file}' ... "
+            if [[ -x "$file" ]]; then
+              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+            else
+              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo -e "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
               errors=$((errors + 1))
             fi  
           done
