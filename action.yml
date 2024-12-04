@@ -1,0 +1,89 @@
+name: Upload (preserving) Artifact
+description: Tarball files before uploading the artifact to preserve file privileges.
+author: Patrick Lehmann (@Paebbels)
+
+inputs:
+  name:
+    description: "Name of the artifact."
+    type: string
+  path:
+    description: A list of file/directory pattern to be tarballed and uploaded as an artifact.
+    required: true
+    type: string
+#  if-no-files-found:
+#  retention-days:
+#  compression-level:
+  overwrite:
+    required: false
+    default: false
+    type: boolean
+#  include-hidden-files:
+  temp_tarball:
+    type: string
+    required: false
+    default: '__upload_artifact__.tar'
+
+outputs:
+  artifact-id:
+#    description: "Random number"
+    value: ${{ steps.upload.outputs.artifact-id }}
+  artifact-url:
+    value: ${{ steps.upload.outputs.artifact-url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Create tarball from given file patterns
+      id: prepare
+      shell: bash
+      run: |
+        set +e
+
+        ANSI_LIGHT_RED="\e[91m"
+        ANSI_LIGHT_GREEN="\e[92m"
+        ANSI_NOCOLOR="\e[0m"
+
+        PATTERNS=()
+        while IFS=$'\r\n' read -r pattern; do
+          # skip empty or comment lines
+          [[ "${pattern}" == "" || "${pattern:0:1}" == "#" ]] && continue
+
+          PATTERNS+=($pattern)
+        done <<<'${{ inputs.path }}'
+        
+        # echo "PATTERNS: ${PATTERNS[@]}"
+        
+        echo -n "Creating temporary tarball ... "
+        tar -cf "${{ inputs.temp_tarball }}" "${PATTERNS[@]}"
+        if [[ $? -ne 0 ]]; then
+          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        else
+          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        fi
+
+    # https://github.com/actions/upload-artifact
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      id: upload
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.temp_tarball }}
+        overwrite: ${{ inputs.overwrite }}
+
+    - name: Remove temporary tarball
+      id: cleanup
+      shell: bash
+      run: |
+        set +e
+
+        ANSI_LIGHT_RED="\e[91m"
+        ANSI_LIGHT_GREEN="\e[92m"
+        ANSI_NOCOLOR="\e[0m"
+        
+        echo -n "Removing temporary tarball ... "
+        rm -f "${{ inputs.temp_tarball }}"
+        if [[ $? -ne 0 ]]; then
+          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        else
+          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        fi

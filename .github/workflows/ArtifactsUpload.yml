@@ -1,0 +1,161 @@
+name: Verification of Preserving Artifact Upload
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  Build:
+    name: Upload artifact
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: 🖉 Build 1
+        run: |
+          echo "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
+          echo "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
+          echo "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
+          
+          mkdir -p bin
+          echo "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > bin/program.py
+          chmod u+x bin/program.py
+          
+          mkdir -p lib
+          echo "Library $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
+          chmod +x lib/common.py
+
+      - name: 🔎 Inspect directory structure
+        run: |
+          tree .
+
+      - name: 📤 Upload artifact
+        uses: pyTooling/upload-artifact@main
+        with:
+          name: release
+          path: |
+            document1.txt
+            *.log
+            bin/
+            lib/*.py
+#          if-no-files-found: error
+#          retention-days: 1
+
+  Verify:
+    name: Verify artifact content
+    runs-on: ubuntu-24.04
+    needs:
+      - Build
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release
+
+      - name: 🔎 Inspect downloaded artifact content
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+          
+          echo "List directory content"
+          ls -lAh . 
+          echo "----------------------------------------"
+          
+          echo -n "Does tarball exist ... "
+          if [[ ! -f __upload_artifact__.tar ]]; then
+            echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__upload_artifact__.tar'.${ANSI_NOCOLOR}"
+            exit 1
+          else
+            echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          fi
+
+      - name: 📦 Extract tarball
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+          
+          echo -n "Extracting tarball ... "
+          tar -xf __upload_artifact__.tar
+          if [[ $? -ne 0 ]]; then
+            echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          else
+            echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          fi
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+      - name: 📋 Verify extracted tarball content
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+
+          expected=(
+            "document1.txt"
+            "analysis.log"
+            "build.log"
+            "bin/program.py"
+            "lib/common.py"
+          )
+
+          errors=0          
+          for file in "${expected[@]}"; do
+            echo -n "Checking '${file}' ... "
+            if [[ -f "$file" ]]; then
+              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+            else
+              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo -e "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
+              errors=$((errors + 1))
+            fi  
+          done
+          
+          echo ""
+          if [[ $errors -ne 0 ]]; then
+            echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          else
+            echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+          fi
+
+      - name: 📋 Verify file permissions
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED="\e[91m"
+          ANSI_LIGHT_GREEN="\e[92m"
+          ANSI_NOCOLOR="\e[0m"
+
+          expected=(
+            "bin/program.py"
+            "lib/common.py"
+          )
+
+          errors=0          
+          for file in "${expected[@]}"; do
+            echo -n "Checking '${file}' ... "
+            if [[ -x "$file" ]]; then
+              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+            else
+              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo -e "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
+              errors=$((errors + 1))
+            fi  
+          done
+          
+          echo ""
+          if [[ $errors -ne 0 ]]; then
+            echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          else
+            echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+          fi
