@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build:
-    name: Upload artifact
+  Build-1:
+    name: Build 1 - Upload artifact
     runs-on: ubuntu-24.04
 
     steps:
@@ -19,38 +19,209 @@ jobs:
           mkdir -p bin
           echo "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > bin/program.py
           chmod u+x bin/program.py
+          echo "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/tool.py
+          chmod g+x bin/tool.py
           
           mkdir -p lib
-          echo "Library $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
+          echo "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
           chmod +x lib/common.py
+          echo "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/shared.py
+          chmod +x lib/shared.py
+          
+          mkdir -p lib/gui
+          echo "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/gui/main.py
+          chmod +x lib/gui/main.py
+          echo "Library 4 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/gui/dialog.py
+          chmod +x lib/gui/dialog.py
 
       - name: 🔎 Inspect directory structure
         run: |
           tree .
 
-      - name: 📤 Upload artifact
+      - name: 📤 Upload artifact 'github-release'
         uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
         with:
-          name: release
+          name: github-release
           path: |
             document1.txt
             *.log
-            bin/
-            lib/*.py
-#          if-no-files-found: error
-#          retention-days: 1
+            bin/*.py
+            lib/
 
-  Verify:
+      - name: 📤 Upload artifact 'pyTooling-release'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-release
+          path: |
+            document1.txt
+            *.log
+            bin/*.py
+            lib/
+
+      - name: 📤 Upload artifact 'pyTooling-lib'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-lib
+          working-directory: lib
+          path: |
+            **/*.py
+
+      - name: 📤 Upload artifact 'github-single-file'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-single-file
+          path: |
+            document1.txt
+
+      - name: 📤 Upload artifact 'pyTooling-single-file'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-single-file
+          path: |
+            document1.txt
+
+      - name: 📤 Upload artifact 'github-single-file-in-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-single-file-in-directory
+          path: |
+            bin/program.py
+
+      - name: 📤 Upload artifact 'pyTooling-single-file-in-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-single-file-in-directory
+          path: |
+            bin/program.py
+
+      - name: 📤 Upload artifact 'github-double-file-in-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-double-file-in-directory
+          path: |
+            bin/program.py
+            bin/tool.py
+
+      - name: 📤 Upload artifact 'pyTooling-double-file-in-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-double-file-in-directory
+          path: |
+            bin/program.py
+            bin/tool.py
+
+      - name: 📤 Upload artifact 'github-triple-file-in-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-triple-file-in-directory
+          path: |
+            lib/common.py
+            lib/gui/main.py
+            lib/gui/dialog.py
+
+      - name: 📤 Upload artifact 'pyTooling-triple-file-in-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-triple-file-in-directory
+          path: |
+            lib/common.py
+            lib/gui/main.py
+            lib/gui/dialog.py
+
+      - name: 📤 Upload artifact 'github-double-file-in-deep-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-double-file-in-deep-directory
+          path: |
+            lib/gui/main.py
+            lib/gui/dialog.py
+
+      - name: 📤 Upload artifact 'pyTooling-double-file-in-deep-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-double-file-in-deep-directory
+          path: |
+            lib/gui/main.py
+            lib/gui/dialog.py
+
+      - name: 📤 Upload artifact 'github-single-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-single-directory
+          path: |
+            bin
+
+      - name: 📤 Upload artifact 'pyTooling-single-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-single-directory
+          path: |
+            bin
+
+      - name: 📤 Upload artifact 'github-double-directory'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-double-directory
+          path: |
+            bin
+            lib
+
+      - name: 📤 Upload artifact 'pyTooling-double-directory'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-double-directory
+          path: |
+            bin
+            lib
+
+      - name: 📤 Upload artifact 'github-unpredictable-wildcard'
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: github-unpredictable-wildcard
+          path: |
+            lib/gui/main.py
+            lib/gui/dialog.py
+            *.foo
+
+      - name: 📤 Upload artifact 'pyTooling-unpredictable-wildcard'
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: pyTooling-unpredictable-wildcard
+          path: |
+            lib/gui/main.py
+            lib/gui/dialog.py
+            *.foo
+
+  Verify-0:
     name: Verify artifact content
     runs-on: ubuntu-24.04
     needs:
-      - Build
+      - Build-1
 
     steps:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: release
+          name: github-release
 
       - name: 🔎 Inspect downloaded artifact content
         run: |
@@ -161,3 +332,293 @@ jobs:
           else
             echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
           fi
+
+  Inspect-1:
+    name: Inspect single file
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-single-file
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-2:
+    name: Inspect single file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-single-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-3:
+    name: Inspect double file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-double-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-4:
+    name: Inspect triple file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-triple-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-5:
+    name: Inspect double file in deep directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-double-file-in-deep-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-6:
+    name: Inspect single directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-single-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-7:
+    name: Inspect double directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-double-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Inspect-8:
+    name: Inspect Unpredictable Wildcard
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-unpredictable-wildcard
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tree .
+
+  Verify-1:
+    name: Verify single file
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-single-file
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-2:
+    name: Verify single file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-2
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-single-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-3:
+    name: Verify double file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-3
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-double-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-4:
+    name: Verify triple file in directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-4
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-triple-file-in-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-5:
+    name: Verify double file in deep directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-5
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-double-file-in-deep-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-6:
+    name: Verify single directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-6
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-single-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-7:
+    name: Verify double directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-7
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-double-directory
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-8:
+    name: Verify Unpredictable Wildcard
+    runs-on: ubuntu-24.04
+    needs:
+      - Inspect-8
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-unpredictable-wildcard
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
+
+  Verify-9:
+    name: Verify lib directory
+    runs-on: ubuntu-24.04
+    needs:
+      - Build-1
+
+    steps:
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyTooling-lib
+
+      - name: 🔎 Inspect extracted tarball
+        run: |
+          tar -xf "__upload_artifact__.tar"
+          rm __upload_artifact__.tar
+          tree .
