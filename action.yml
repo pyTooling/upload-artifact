@@ -109,22 +109,22 @@ runs:
               echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         
               dir="${{ inputs.working-directory }}"
-              tar_directory=""
+              tarDirectory=""
               while [[ "${dir}" != "." ]]; do
-                tar_directory="../${tar_directory}"
+                tarDirectory="../${tarDirectory}"
                 dir=$(dirname -- "${dir}")
               done
-              echo "tar_directory: ${tar_directory}"
+              echo "  tarDirectory: ${tarDirectory}"
             fi
           else
             echo -e "echo -e ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
             exit 1
           fi
         else
-          tar_directory=""
+          tarDirectory=""
         fi
 
-        echo -n "Resolving provided file patterns ... "
+        echo -n "Convert provided file patterns to a single line ... "
         PATTERNS=()
         while IFS=$'\r\n' read -r pattern; do
           # skip empty or comment lines
@@ -140,8 +140,21 @@ runs:
           done | sort | uniq
         }
         
-        echo -n "Creating temporary tarball '${tar_directory}${{ inputs.tarball-name }}' ... "
-        tar -cf "${tar_directory}${{ inputs.tarball-name }}" --verbatim-files-from --files-from <(print_files_unique "${PATTERNS[@]}")
+        echo -e "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
+        echo -n "Assemble OS specific tar command line options ... "
+        if [[ "${{ runner.os }}" == "macOS" ]]; then
+          echo -e "${ANSI_Y}[macOS]${ANSI_NOCOLOR}"
+          filesFrom=("-T")
+        elif [[ "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
+          echo -e "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
+          filesFrom=("--verbatim-files-from" "--files-from")
+        else
+          echo -e "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
+          exit 1
+        fi
+        
+        echo -n "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
+        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
@@ -149,7 +162,7 @@ runs:
           echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
         
-        echo -e "${ANSI_CYAN}Files collected: $(tar -tf '${{ inputs.tarball-name }}' | wc -l)${ANSI_NOCOLOR}"
+        echo -e "${ANSI_CYAN}Files collected: $(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)${ANSI_NOCOLOR}"
 
     # https://github.com/actions/upload-artifact
     - name: Upload artifact
