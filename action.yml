@@ -107,14 +107,21 @@ runs:
               exit 1
             else
               echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
-              echo "tar_directory=${{ inputs.working-directory }}/" >> $GITHUB_OUTPUT
+        
+              dir="${{ inputs.working-directory }}"
+              tar_directory=""
+              while [[ "${dir}" != "." ]]; do
+                tar_directory="../${tar_directory}"
+                dir=$(dirname -- "${dir}")
+              done
+              echo "tar_directory: ${tar_directory}"
             fi
           else
             echo -e "echo -e ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
             exit 1
           fi
         else
-          echo "tar_directory=" >> $GITHUB_OUTPUT
+          tar_directory=""
         fi
 
         echo -n "Resolving provided file patterns ... "
@@ -133,8 +140,8 @@ runs:
           done | sort | uniq
         }
         
-        echo -n "Creating temporary tarball ... "
-        tar -cf "${{ inputs.tarball-name }}" --verbatim-files-from --files-from <(print_files_unique "${PATTERNS[@]}")
+        echo -n "Creating temporary tarball '${tar_directory}${{ inputs.tarball-name }}' ... "
+        tar -cf "${tar_directory}${{ inputs.tarball-name }}" --verbatim-files-from --files-from <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
@@ -150,7 +157,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
-        path: ${{ steps.prepare.outputs.tar_directory }}${{ inputs.tarball-name }}
+        path: ${{ inputs.tarball-name }}
         if-no-files-found: ${{ inputs.if-no-files-found }}
         retention-days: ${{ inputs.retention-days }}
         compression-level: ${{ inputs.compression-level }}
@@ -168,7 +175,7 @@ runs:
         ANSI_NOCOLOR="\e[0m"
         
         echo -n "Removing temporary tarball ... "
-        rm -f "${{ steps.prepare.outputs.tar_directory }}${{ inputs.tarball-name }}"
+        rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
         else
