@@ -10,11 +10,32 @@ rcdailey/download-tar-action.yml](https://gist.github.com/rcdailey/cd3437bb2c636
 
 ## Fixed behavior compared to `actions/upload-artifact`
 
+*tbd*
+
+1. Preserve file permissions
+2. Defined root directory from where the content of the tarball is constructed.
+
+## Limitations of `tar`
+
+### On Linux
+
+*tbd*
+
+
+### On macOS
+
+*tbd*
+
+
+### On Windows
+
+*tbd*
 
 
 ## Dependencies
 
 * [actions/upload-artifact@v4](https://github.com/actions/upload-artifact)
+
 
 ## Contributors
 
