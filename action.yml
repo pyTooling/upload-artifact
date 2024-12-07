@@ -1,4 +1,7 @@
 name: Upload (preserving) Artifact
+branding:
+  icon: upload
+  color: yellow
 description: Tarball files before uploading the artifact to preserve file privileges.
 author: Patrick Lehmann (@Paebbels)
 
