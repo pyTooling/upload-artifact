@@ -73,7 +73,7 @@ inputs:
   tarball-name:
     type: string
     required: false
-    default: '__upload_artifact__.tar'
+    default: '__pyTooling_upload_artifact__.tar'
 
 outputs:
   artifact-id:
