@@ -236,9 +236,9 @@ jobs:
           echo "----------------------------------------"
           
           echo -n "Does tarball exist ... "
-          if [[ ! -f __upload_artifact__.tar ]]; then
+          if [[ ! -f __pyTooling_upload_artifact__.tar ]]; then
             echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__upload_artifact__.tar'.${ANSI_NOCOLOR}"
+            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
             exit 1
           else
             echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -253,7 +253,7 @@ jobs:
           ANSI_NOCOLOR="\e[0m"
           
           echo -n "Extracting tarball ... "
-          tar -xf __upload_artifact__.tar
+          tar -xf __pyTooling_upload_artifact__.tar
           if [[ $? -ne 0 ]]; then
             echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           else
@@ -475,8 +475,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-2:
@@ -493,8 +493,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-3:
@@ -511,8 +511,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-4:
@@ -529,8 +529,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-5:
@@ -547,8 +547,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-6:
@@ -565,8 +565,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-7:
@@ -583,8 +583,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-8:
@@ -601,8 +601,8 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-9:
@@ -619,6 +619,6 @@ jobs:
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tar -xf "__upload_artifact__.tar"
-          rm __upload_artifact__.tar
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
