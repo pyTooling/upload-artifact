@@ -1,15 +1,10 @@
-# File Permission Preserving Artifact Upload Action
+# Artifact Upload Action with File Permission Preservation
 
 This composite action, based on [`actions/upload-artifact`](https://github.com/actions/upload-artifact) and packaging
 the artifact's content in a tarball, will preserve file attributes like **file permissions**. This essential capability
 is not implemented by GitHub until now (requested on [05.12.2019](https://github.com/actions/upload-artifact/issues/38))
 and still delayed and/or refused? to be implemented in the future. According to GitHub, the internal API doesn't allow
 the implementation of such a feature, but this actions is demonstrating a working solution.
-
-**Based on:**
- * [actions/upload-artifact#38 - upload-artifact does not retain artifact permissions (08. Sep. 2024)](https://github.com/actions/upload-artifact/issues/38#issuecomment-2336484584)
- * [Gist: 
-rcdailey/download-tar-action.yml](https://gist.github.com/rcdailey/cd3437bb2c63647126aa5740824b2a4f)
 
 
 ## Usage
@@ -36,6 +31,9 @@ jobs:
             build/*.log
 ```
 
+
+### Input Parameters
+
 | Parameter              | Required | Default             | Description                                                                                                                                                                                                                                                                          |
 |------------------------|:--------:|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `name`                 |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                      |
@@ -49,6 +47,14 @@ jobs:
 | `tarball-name`         |    no    | [^1]                |                                                                                                                                                                                                                                                                                      |
 
 [^1]: `'__pyTooling_upload_artifact__.tar'`
+
+
+### Output Parameters
+
+| Parameter      | Description                                                                                                                                                                                                                                                                                    |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `artifact-id`  | GitHub ID of an Artifact, can be used by the REST API                                                                                                                                                                                                                                          |
+| `artifact-url` | URL to download an Artifact. Can be used in many scenarios such as linking to artifacts in issues or pull requests. Users must be logged-in in order for this URL to work. This URL is valid as long as the artifact has not expired or the artifact, run or repository have not been deleted. |
 
 
 ## Fixed behavior compared to `actions/upload-artifact`
@@ -69,12 +75,13 @@ This action uses `tar` as provided by the GitHub runner's operating system image
 
 ### On Linux (GNU tar)
 
-To ensure files starting with a dash aren't considered command line options to `tar`, it's called with
+To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
+
 
 ### On macOS (BSD tar)
 
-BSD tar doesn't support a `--verbatim-files-from` option. Thus, files starting with a dash might be interpreted by `tar`
+⚠ BSD tar doesn't support a `--verbatim-files-from` option. Thus, files starting with a dash might be interpreted by `tar`
 as a command line option.
 
 > **-T filename**, **--files-from filename**  
@@ -89,7 +96,7 @@ as a command line option.
 
 ### On Windows (GNU tar)
 
-To ensure files starting with a dash aren't considered command line options to `tar`, it's called with
+To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
 
 
@@ -103,3 +110,19 @@ To ensure files starting with a dash aren't considered command line options to `
 * [Patrick Lehmann](https://GitHub.com/Paebbels) (Maintainer)
 * [Sven Köhler](https://GitHub.com/skoehler)
 * [and more...](https://GitHub.com/pyTooling/upload-artifact/graphs/contributors)
+
+### Credits
+
+**This action was inspired by and is based on:**
+ * [actions/upload-artifact#38 - upload-artifact does not retain artifact permissions (08. Sep. 2024)](https://github.com/actions/upload-artifact/issues/38#issuecomment-2336484584)
+ * [Gist: 
+rcdailey/download-tar-action.yml](https://gist.github.com/rcdailey/cd3437bb2c63647126aa5740824b2a4f)
+
+
+## License
+
+This GitHub Composite Action (source code) licensed under [The MIT License](LICENSE.md).
+
+---
+
+SPDX-License-Identifier: MIT
