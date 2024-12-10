@@ -157,7 +157,7 @@ runs:
         fi
         
         echo -n "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
-        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
+        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" --owner=0 --group=0 "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
