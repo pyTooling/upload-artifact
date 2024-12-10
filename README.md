@@ -6,6 +6,8 @@ is not implemented by GitHub until now (requested on [05.12.2019](https://github
 and still delayed and/or refused? to be implemented in the future. According to GitHub, the internal API doesn't allow
 the implementation of such a feature, but this actions is demonstrating a working solution.
 
+See [pyTooling/download-artifact](https://github.com/pyTooling/download-artifact) for the matching download action.
+
 
 ## Usage
 
@@ -53,7 +55,7 @@ jobs:
 
 | Parameter      | Description                                                                                                                                                                                                                                                                                    |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `artifact-id`  | GitHub ID of an Artifact, can be used by the REST API                                                                                                                                                                                                                                          |
+| `artifact-id`  | GitHub ID of an Artifact, can be used by the REST API.                                                                                                                                                                                                                                         |
 | `artifact-url` | URL to download an Artifact. Can be used in many scenarios such as linking to artifacts in issues or pull requests. Users must be logged-in in order for this URL to work. This URL is valid as long as the artifact has not expired or the artifact, run or repository have not been deleted. |
 
 
@@ -103,6 +105,13 @@ To ensure files starting with a dash aren't considered command line options to `
 ## Dependencies
 
 * [actions/upload-artifact@v4](https://github.com/actions/upload-artifact)
+
+
+## Competing Actions
+
+* [eviden-actions/upload-artifact](https://github.com/eviden-actions/upload-artifact)
+* [nmerget/upload-gzip-artifact](https://github.com/nmerget/upload-gzip-artifact)
+* [alehechka/upload-tartifact](https://github.com/alehechka/upload-tartifact)
 
 
 ## Contributors
