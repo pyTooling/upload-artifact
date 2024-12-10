@@ -41,7 +41,7 @@ inputs:
       Minimum 1 day.
       Maximum 90 days unless changed from the repository settings page.
       Optional. Defaults to repository settings.
-    type: integer
+    type: number
     required: false
   compression-level:
     description: |
@@ -49,7 +49,7 @@ inputs:
       The value can range from 0 to 9.
       For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.
       Optional. Default is '6'
-    type: integer
+    type: number
     required: false
     default: 6
   overwrite:
