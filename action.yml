@@ -23,7 +23,7 @@ author: Patrick Lehmann (@Paebbels)
 
 inputs:
   name:
-    description: | 
+    description: |
       Name of the artifact to upload.
     type: string
     required: false
@@ -120,7 +120,7 @@ runs:
               exit 1
             else
               echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
-        
+
               dir="${{ inputs.working-directory }}"
               tarDirectory=""
               while [[ "${dir}" != "." ]]; do
@@ -146,35 +146,45 @@ runs:
           PATTERNS+=("$pattern")
         done <<<'${{ inputs.path }}'
         echo -e "${ANSI_LIGHT_GREEN}[DONE]${ANSI_NOCOLOR}"
-        
+
         print_files_unique() {
           for i in "$@"; do
             compgen -G "$i" || true
           done | sort | uniq
         }
-        
+
         echo -e "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
         echo -n "Assemble OS specific tar command line options ... "
         if [[ "${{ runner.os }}" == "macOS" ]]; then
           echo -e "${ANSI_Y}[macOS]${ANSI_NOCOLOR}"
+
+          # Options for BSD tar
+          tarOptions=()
+
+          # Option to read filenames from file
           filesFrom=("-T")
         elif [[ "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
           echo -e "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
+
+          # Options for GNU tar
+          tarOptions=("--owner=0" "--group=0")
+
+          # Option to read filenames from file
           filesFrom=("--verbatim-files-from" "--files-from")
         else
           echo -e "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
           exit 1
         fi
-        
+
         echo -n "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
-        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" --owner=0 --group=0 "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
+        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
         else
           echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
-        
+
         echo -e "${ANSI_CYAN}Files collected: $(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)${ANSI_NOCOLOR}"
 
     # https://github.com/actions/upload-artifact
@@ -199,7 +209,7 @@ runs:
         ANSI_LIGHT_RED="\e[91m"
         ANSI_LIGHT_GREEN="\e[92m"
         ANSI_NOCOLOR="\e[0m"
-        
+
         echo -n "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
