@@ -13,9 +13,9 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\x1b[91m"
-        ANSI_LIGHT_GREEN="\x1b[92m"
-        ANSI_NOCOLOR="\x1b[0m"
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_NOCOLOR=$'\x1b[0m'
 
         errors=0
         while IFS=$'\r\n' read -r file; do

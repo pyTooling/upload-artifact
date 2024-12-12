@@ -13,29 +13,29 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\x1b[91m"
-        ANSI_LIGHT_GREEN="\x1b[92m"
-        ANSI_NOCOLOR="\x1b[0m"
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_NOCOLOR=$'\x1b[0m'
 
         errors=0
         while IFS=$'\r\n' read -r file; do
           # skip empty or comment lines
           [[ "${file}" == "" || "${file:0:1}" == "#" ]] && continue
-        
-          echo -n "Checking '${file}' ... "
+
+          printf "%s" "Checking '${file}' ... "
           if [[ -x "$file" ]]; then
-            echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
           else
-            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            echo "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
             errors=$((errors + 1))
           fi
         done <<<'${{ inputs.files }}'
 
-        echo ""
+        printf "\n"
         if [[ $errors -ne 0 ]]; then
-          echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
           exit 1
         else
-          echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
         fi

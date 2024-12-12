@@ -261,9 +261,9 @@ jobs:
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\x1b[91m"
-          ANSI_LIGHT_GREEN="\x1b[92m"
-          ANSI_NOCOLOR="\x1b[0m"
+          ANSI_LIGHT_RED=$'\x1b[91m'
+          ANSI_LIGHT_GREEN=$'\x1b[92m'
+          ANSI_NOCOLOR=$'\x1b[0m'
 
           echo "List directory content"
           ls -lAh .
@@ -282,9 +282,9 @@ jobs:
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\x1b[91m"
-          ANSI_LIGHT_GREEN="\x1b[92m"
-          ANSI_NOCOLOR="\x1b[0m"
+          ANSI_LIGHT_RED=$'\x1b[91m'
+          ANSI_LIGHT_GREEN=$'\x1b[92m'
+          ANSI_NOCOLOR=$'\x1b[0m'
 
           echo -n "Extracting tarball ... "
           tar -xf __pyTooling_upload_artifact__.tar

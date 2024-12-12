@@ -8,6 +8,16 @@ the implementation of such a feature, but this actions is demonstrating a workin
 
 See [pyTooling/download-artifact](https://github.com/pyTooling/download-artifact) for the matching download action.
 
+## Advantages Compared to Competing GitHub Actions
+
+* Support all parameters of `actions/upload-artifact`.  
+	(Others support only a subset.)
+* Supports Ubuntu, Windows and macOS GitHub Runner images.  
+	(Others are created for Linux only.)
+* Well-defined behavior of tarball internal directory/file structure.  
+	(No silent and "unpredictable" removal of common prefixes.)
+* Store files in tarball without owner and group information.
+* Testcases implemented as a pipeline verifying uploads/downloads using a tarball.
 
 ## Usage
 

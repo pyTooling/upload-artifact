@@ -106,10 +106,11 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\x1b[91m"
-        ANSI_LIGHT_GREEN="\x1b[92m"
-        ANSI_CYAN="\x1b[36m"
-        ANSI_NOCOLOR="\x1b[0m"
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_NOCOLOR=$'\x1b[0m'
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
           echo -n "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
@@ -156,7 +157,7 @@ runs:
         echo "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
         echo -n "Assemble OS specific tar command line options ... "
         if [[ "${{ runner.os }}" == "macOS" ]]; then
-          echo "${ANSI_Y}[macOS]${ANSI_NOCOLOR}"
+          echo "${ANSI_LIGHT_YELLOW}[macOS]${ANSI_NOCOLOR}"
 
           # Options for BSD tar
           tarOptions=()
@@ -206,9 +207,9 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\x1b[91m"
-        ANSI_LIGHT_GREEN="\x1b[92m"
-        ANSI_NOCOLOR="\x1b[0m"
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_NOCOLOR=$'\x1b[0m'
 
         echo -n "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"
