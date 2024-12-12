@@ -35,26 +35,26 @@ jobs:
     steps:
       - name: 🖉 Build 1
         run: |
-          echo "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
-          echo "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
-          echo "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
+          printf "%s\n" "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
+          printf "%s\n" "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
+          printf "%s\n" "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
 
           mkdir -p bin
-          echo "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > bin/program.py
+          printf "%s\n" "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/program.py
           chmod u+x bin/program.py
-          echo "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/tool.py
+          printf "%s\n" "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"         > bin/tool.py
           chmod g+x bin/tool.py
 
           mkdir -p lib
-          echo "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
+          printf "%s\n" "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/common.py
           chmod +x lib/common.py
-          echo "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/shared.py
+          printf "%s\n" "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/shared.py
           chmod +x lib/shared.py
 
           mkdir -p lib/gui
-          echo "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/gui/main.py
+          printf "%s\n" "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/main.py
           chmod +x lib/gui/main.py
-          echo "Library 4 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/gui/dialog.py
+          printf "%s\n" "Library 4 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/dialog.py
           chmod +x lib/gui/dialog.py
 
       - name: 🔎 Inspect directory structure
@@ -265,17 +265,17 @@ jobs:
           ANSI_LIGHT_GREEN=$'\x1b[92m'
           ANSI_NOCOLOR=$'\x1b[0m'
 
-          echo "List directory content"
+          printf "%s\n" "List directory content"
           ls -lAh .
-          echo "----------------------------------------"
+          printf "%s\n" "----------------------------------------"
 
-          echo -n "Does tarball exist ... "
+          printf "%s" "Does tarball exist ... "
           if [[ ! -f __pyTooling_upload_artifact__.tar ]]; then
-            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            echo "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
             exit 1
           else
-            echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
 
       - name: 📦 Extract tarball
@@ -286,12 +286,12 @@ jobs:
           ANSI_LIGHT_GREEN=$'\x1b[92m'
           ANSI_NOCOLOR=$'\x1b[0m'
 
-          echo -n "Extracting tarball ... "
+          printf "%s" "Extracting tarball ... "
           tar -xf __pyTooling_upload_artifact__.tar
           if [[ $? -ne 0 ]]; then
-            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           else
-            echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
 
       - name: 🔎 Inspect extracted tarball

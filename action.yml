@@ -113,14 +113,14 @@ runs:
         ANSI_NOCOLOR=$'\x1b[0m'
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
-          echo -n "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
+          printf "%s" "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
           if [[ -d "${{ inputs.working-directory }}" ]]; then
             pushd "${{ inputs.working-directory }}" > /dev/null
             if [[ $? -ne 0 ]]; then
-              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
               exit 1
             else
-              echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+              printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
 
               dir="${{ inputs.working-directory }}"
               tarDirectory=""
@@ -128,17 +128,17 @@ runs:
                 tarDirectory="../${tarDirectory}"
                 dir=$(dirname -- "${dir}")
               done
-              echo "  tarDirectory: ${tarDirectory}"
+              printf "%s\n" "  tarDirectory: ${tarDirectory}"
             fi
           else
-            echo "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
+            printf "%s\n" "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
             exit 1
           fi
         else
           tarDirectory=""
         fi
 
-        echo -n "Convert provided file patterns to a single line ... "
+        printf "%s" "Convert provided file patterns to a single line ... "
         PATTERNS=()
         while IFS=$'\r\n' read -r pattern; do
           # skip empty or comment lines
@@ -146,7 +146,7 @@ runs:
 
           PATTERNS+=("$pattern")
         done <<<'${{ inputs.path }}'
-        echo "${ANSI_LIGHT_GREEN}[DONE]${ANSI_NOCOLOR}"
+        printf "%s\n" "${ANSI_LIGHT_GREEN}[DONE]${ANSI_NOCOLOR}"
 
         print_files_unique() {
           for i in "$@"; do
@@ -154,10 +154,10 @@ runs:
           done | sort | uniq
         }
 
-        echo "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
-        echo -n "Assemble OS specific tar command line options ... "
+        printf "%s\n" "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
+        printf "%s" "Assemble OS specific tar command line options ... "
         if [[ "${{ runner.os }}" == "macOS" ]]; then
-          echo "${ANSI_LIGHT_YELLOW}[macOS]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_YELLOW}[macOS]${ANSI_NOCOLOR}"
 
           # Options for BSD tar
           tarOptions=("--gname=root" "--gid=0" "--uname=root" "--uid=0")
@@ -165,7 +165,7 @@ runs:
           # Option to read filenames from file
           filesFrom=("-T")
         elif [[ "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
-          echo "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
 
           # Options for GNU tar
           tarOptions=("--owner=root:0" "--group=root:0")
@@ -173,14 +173,14 @@ runs:
           # Option to read filenames from file
           filesFrom=("--verbatim-files-from" "--files-from")
         else
-          echo "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
           exit 1
         fi
 
-        echo -n "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
+        printf "%s" "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
         tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
-          echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
         else
           echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -211,7 +211,7 @@ runs:
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
-        echo -n "Removing temporary tarball ... "
+        printf "%s" "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
           echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
