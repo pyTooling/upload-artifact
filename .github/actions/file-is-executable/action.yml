@@ -1,0 +1,41 @@
+name: File-Is-Executable
+description: Check if listed files are executable.
+inputs:
+  files:
+    description: List of filenames.
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: 📋 Verify file permissions
+      shell: bash
+      run: |
+        set +e
+
+        ANSI_LIGHT_RED="\x1b[91m"
+        ANSI_LIGHT_GREEN="\x1b[92m"
+        ANSI_NOCOLOR="\x1b[0m"
+
+        errors=0
+        while IFS=$'\r\n' read -r file; do
+          # skip empty or comment lines
+          [[ "${file}" == "" || "${file:0:1}" == "#" ]] && continue
+        
+          echo -n "Checking '${file}' ... "
+          if [[ -x "$file" ]]; then
+            echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+          else
+            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
+            errors=$((errors + 1))
+          fi
+        done <<<'${{ inputs.files }}'
+
+        echo ""
+        if [[ $errors -ne 0 ]]; then
+          echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          exit 1
+        else
+          echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+        fi

@@ -58,6 +58,7 @@ jobs:
           chmod +x lib/gui/dialog.py
 
       - name: 🔎 Inspect directory structure
+        if: runner.os != 'macOS'
         run: |
           tree .
 
@@ -248,10 +249,13 @@ jobs:
           - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
 
     steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-release
+          name: ${{ matrix.os.name }}-github-release
 
       - name: 🔎 Inspect downloaded artifact content
         run: |
@@ -291,92 +295,64 @@ jobs:
           fi
 
       - name: 🔎 Inspect extracted tarball
+        if: runner.os != 'macOS'
         run: |
           tree .
 
       - name: 📋 Verify extracted tarball content
-        run: |
-          set +e
-
-          ANSI_LIGHT_RED="\x1b[91m"
-          ANSI_LIGHT_GREEN="\x1b[92m"
-          ANSI_NOCOLOR="\x1b[0m"
-
-          expected=(
-            "document1.txt"
-            "analysis.log"
-            "build.log"
-            "bin/program.py"
-            "lib/common.py"
-          )
-
-          errors=0
-          for file in "${expected[@]}"; do
-            echo -n "Checking '${file}' ... "
-            if [[ -f "$file" ]]; then
-              echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
-            else
-              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-              echo "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
-              errors=$((errors + 1))
-            fi
-          done
-
-          echo ""
-          if [[ $errors -ne 0 ]]; then
-            echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
-            exit 1
-          else
-            echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
-          fi
+        uses: ./.github/actions/check-directory-content
+        with:
+          files: |
+            document1.txt
+            analysis.log
+            build.log
+            bin/program.py
+            lib/common.py
 
       - name: 📋 Verify file permissions
-        run: |
-          set +e
-
-          ANSI_LIGHT_RED="\x1b[91m"
-          ANSI_LIGHT_GREEN="\x1b[92m"
-          ANSI_NOCOLOR="\x1b[0m"
-
-          expected=(
-            "bin/program.py"
-            "lib/common.py"
-          )
-
-          errors=0
-          for file in "${expected[@]}"; do
-            echo -n "Checking '${file}' ... "
-            if [[ -x "$file" ]]; then
-              echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
-            else
-              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-              echo "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
-              errors=$((errors + 1))
-            fi
-          done
-
-          echo ""
-          if [[ $errors -ne 0 ]]; then
-            echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
-            exit 1
-          else
-            echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
-          fi
+        uses: ./.github/actions/file-is-executable
+        with:
+          files: |
+            bin/program.py
+            lib/common.py
 
   Inspect-1:
-    name: Inspect single file
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Single file ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'action': 'pyTooling/upload-artifact'}
 
     steps:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
+        if: matrix.task.name == 'inspect'
         with:
-          name: github-single-file
+          name: ${{ matrix.os.name }}-github-single-file
 
       - name: 🔎 Inspect extracted tarball
+        if: matrix.task.name == 'inspect'
         run: |
+          tree .
+
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        if: matrix.task.name == 'verify'
+        with:
+          name: ${{ matrix.os.name }}-pyTooling-single-file
+
+      - name: 🔎 Inspect extracted tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Inspect-2:
@@ -389,7 +365,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-single-file-in-directory
+          name: ${{ matrix.os.name }}-github-single-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -405,7 +381,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-double-file-in-directory
+          name: ${{ matrix.os.name }}-github-double-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -421,7 +397,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-triple-file-in-directory
+          name: ${{ matrix.os.name }}-github-triple-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -437,7 +413,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-double-file-in-deep-directory
+          name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -453,7 +429,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-single-directory
+          name: ${{ matrix.os.name }}-github-single-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -469,7 +445,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-double-directory
+          name: ${{ matrix.os.name }}-github-double-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -485,28 +461,10 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-unpredictable-wildcard
+          name: ${{ matrix.os.name }}-github-unpredictable-wildcard
 
       - name: 🔎 Inspect extracted tarball
         run: |
-          tree .
-
-  Verify-1:
-    name: Verify single file
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-1
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pyTooling-single-file
-
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
           tree .
 
   Verify-2:
@@ -519,7 +477,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-single-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-single-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -537,7 +495,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-double-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -555,7 +513,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-triple-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-triple-file-in-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -573,7 +531,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-double-file-in-deep-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-file-in-deep-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -591,7 +549,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-single-directory
+          name: ${{ matrix.os.name }}-pyTooling-single-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -609,7 +567,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-double-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-directory
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -627,7 +585,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-unpredictable-wildcard
+          name: ${{ matrix.os.name }}-pyTooling-unpredictable-wildcard
 
       - name: 🔎 Inspect extracted tarball
         run: |
@@ -645,7 +603,7 @@ jobs:
       - name: 📥 Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: pyTooling-lib
+          name: ${{ matrix.os.name }}-pyTooling-lib
 
       - name: 🔎 Inspect extracted tarball
         run: |
