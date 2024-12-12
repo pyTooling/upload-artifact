@@ -160,7 +160,7 @@ runs:
           echo "${ANSI_LIGHT_YELLOW}[macOS]${ANSI_NOCOLOR}"
 
           # Options for BSD tar
-          tarOptions=()
+          tarOptions=("--gname=root" "--gid=0" "--uname=root" "--uid=0")
 
           # Option to read filenames from file
           filesFrom=("-T")
@@ -168,7 +168,7 @@ runs:
           echo "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
 
           # Options for GNU tar
-          tarOptions=("--owner=0" "--group=0")
+          tarOptions=("--owner=root:0" "--group=root:0")
 
           # Option to read filenames from file
           filesFrom=("--verbatim-files-from" "--files-from")
