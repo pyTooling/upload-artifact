@@ -33,34 +33,10 @@ jobs:
           - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
 
     steps:
-      - name: 🖉 Build 1
-        run: |
-          printf "%s\n" "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
-          printf "%s\n" "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
-          printf "%s\n" "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
 
-          mkdir -p bin
-          printf "%s\n" "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/program.py
-          chmod u+x bin/program.py
-          printf "%s\n" "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"         > bin/tool.py
-          chmod g+x bin/tool.py
-
-          mkdir -p lib
-          printf "%s\n" "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/common.py
-          chmod +x lib/common.py
-          printf "%s\n" "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/shared.py
-          chmod +x lib/shared.py
-
-          mkdir -p lib/gui
-          printf "%s\n" "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/main.py
-          chmod +x lib/gui/main.py
-          printf "%s\n" "Library 4 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/dialog.py
-          chmod +x lib/gui/dialog.py
-
-      - name: 🔎 Inspect directory structure
-        if: runner.os != 'macOS'
-        run: |
-          tree .
+      - uses: ./.github/actions/create-files
 
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release'
         uses: pyTooling/upload-artifact@dev
@@ -327,286 +303,421 @@ jobs:
         os:
           - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'action': 'pyTooling/upload-artifact'}
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥 Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
-        if: matrix.task.name == 'inspect'
         with:
-          name: ${{ matrix.os.name }}-github-single-file
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file
 
-      - name: 🔎 Inspect extracted tarball
-        if: matrix.task.name == 'inspect'
-        run: |
-          tree .
-
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        if: matrix.task.name == 'verify'
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-single-file
-
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
         if: matrix.task.name == 'verify'
         run: |
           tar -xf "__pyTooling_upload_artifact__.tar"
           rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
+        run: |
           tree .
+
+      - name: 📋 Verify artifact content
+        uses: ./.github/actions/check-directory-content
+        with:
+          files: |
+            document1.txt
 
   Inspect-2:
-    name: Inspect single file in directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect single file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-single-file-in-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file-in-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            program.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            bin/program.py
 
   Inspect-3:
-    name: Inspect double file in directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect double file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-double-file-in-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            program.py
+            tool.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            bin/program.py
+            bin/tool.py
 
   Inspect-4:
-    name: Inspect triple file in directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect triple file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-triple-file-in-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-triple-file-in-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            common.py
+            gui/main.py
+            gui/dialog.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            lib/common.py
+            lib/gui/main.py
+            lib/gui/dialog.py
 
   Inspect-5:
-    name: Inspect double file in deep directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect double file in deep directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-deep-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            main.py
+            dialog.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            lib/gui/main.py
+            lib/gui/dialog.py
 
   Inspect-6:
-    name: Inspect single directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect single directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-single-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            program.py
+            tool.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            bin/program.py
+            bin/tool.py
 
   Inspect-7:
-    name: Inspect double directory
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Inspect double directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-double-directory
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-directory
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
+        run: |
+          tar -xf "__pyTooling_upload_artifact__.tar"
+          rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
         run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
+        with:
+          files: |
+            bin/program.py
+            bin/tool.py
+            lib/common.py
+            lib/shared.py
+            lib/gui/main.py
+            lib/gui/dialog.py
+
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
+        with:
+          files: |
+            bin/program.py
+            bin/tool.py
+            lib/common.py
+            lib/shared.py
+            lib/gui/main.py
+            lib/gui/dialog.py
 
   Inspect-8:
-    name: Inspect Unpredictable Wildcard
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Unpredictable Wildcard ${{ matrix.task.action }} on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-github-unpredictable-wildcard
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-unpredictable-wildcard
 
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tree .
-
-  Verify-2:
-    name: Verify single file in directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-2
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-single-file-in-directory
-
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
         run: |
           tar -xf "__pyTooling_upload_artifact__.tar"
           rm __pyTooling_upload_artifact__.tar
-          tree .
 
-  Verify-3:
-    name: Verify double file in directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-3
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-double-file-in-directory
-
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Inspect directory
         run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
           tree .
 
-  Verify-4:
-    name: Verify triple file in directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-4
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'inspect'
         with:
-          name: ${{ matrix.os.name }}-pyTooling-triple-file-in-directory
+          files: |
+            common.py
 
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
-          tree .
-
-  Verify-5:
-    name: Verify double file in deep directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-5
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        if: matrix.task.name == 'verify'
         with:
-          name: ${{ matrix.os.name }}-pyTooling-double-file-in-deep-directory
-
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
-          tree .
-
-  Verify-6:
-    name: Verify single directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-6
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-single-directory
-
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
-          tree .
-
-  Verify-7:
-    name: Verify double directory
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-7
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-double-directory
-
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
-          tree .
-
-  Verify-8:
-    name: Verify Unpredictable Wildcard
-    runs-on: ubuntu-24.04
-    needs:
-      - Inspect-8
-
-    steps:
-      - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.os.name }}-pyTooling-unpredictable-wildcard
-
-      - name: 🔎 Inspect extracted tarball
-        run: |
-          tar -xf "__pyTooling_upload_artifact__.tar"
-          rm __pyTooling_upload_artifact__.tar
-          tree .
+          files: |
+            common.py
 
   Verify-9:
     name: Verify lib directory
     runs-on: ubuntu-24.04
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+        task:
+#          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
+          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
-      - name: 📥 Download artifact
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v4
         with:
-          name: ${{ matrix.os.name }}-pyTooling-lib
+          name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-lib
 
-      - name: 🔎 Inspect extracted tarball
+      - name: 🔎 Extract tarball
+        if: matrix.task.name == 'verify'
         run: |
           tar -xf "__pyTooling_upload_artifact__.tar"
           rm __pyTooling_upload_artifact__.tar
+
+      - name: 🔎 Inspect directory
+        run: |
           tree .
+
+      - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
+        uses: ./.github/actions/check-directory-content
+        with:
+          files: |
+            common.py
+            shared.py
+            gui/dialog.py
+            gui/main.py
