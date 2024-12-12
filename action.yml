@@ -106,20 +106,20 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\e[91m"
-        ANSI_LIGHT_GREEN="\e[92m"
-        ANSI_CYAN="\e[36m"
-        ANSI_NOCOLOR="\e[0m"
+        ANSI_LIGHT_RED="\x1b[91m"
+        ANSI_LIGHT_GREEN="\x1b[92m"
+        ANSI_CYAN="\x1b[36m"
+        ANSI_NOCOLOR="\x1b[0m"
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
           echo -n "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
           if [[ -d "${{ inputs.working-directory }}" ]]; then
             pushd "${{ inputs.working-directory }}" > /dev/null
             if [[ $? -ne 0 ]]; then
-              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
               exit 1
             else
-              echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
 
               dir="${{ inputs.working-directory }}"
               tarDirectory=""
@@ -130,7 +130,7 @@ runs:
               echo "  tarDirectory: ${tarDirectory}"
             fi
           else
-            echo -e "echo -e ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
+            echo "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
             exit 1
           fi
         else
@@ -145,7 +145,7 @@ runs:
 
           PATTERNS+=("$pattern")
         done <<<'${{ inputs.path }}'
-        echo -e "${ANSI_LIGHT_GREEN}[DONE]${ANSI_NOCOLOR}"
+        echo "${ANSI_LIGHT_GREEN}[DONE]${ANSI_NOCOLOR}"
 
         print_files_unique() {
           for i in "$@"; do
@@ -153,10 +153,10 @@ runs:
           done | sort | uniq
         }
 
-        echo -e "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
+        echo "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
         echo -n "Assemble OS specific tar command line options ... "
         if [[ "${{ runner.os }}" == "macOS" ]]; then
-          echo -e "${ANSI_Y}[macOS]${ANSI_NOCOLOR}"
+          echo "${ANSI_Y}[macOS]${ANSI_NOCOLOR}"
 
           # Options for BSD tar
           tarOptions=()
@@ -164,7 +164,7 @@ runs:
           # Option to read filenames from file
           filesFrom=("-T")
         elif [[ "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
-          echo -e "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
+          echo "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
 
           # Options for GNU tar
           tarOptions=("--owner=0" "--group=0")
@@ -172,14 +172,14 @@ runs:
           # Option to read filenames from file
           filesFrom=("--verbatim-files-from" "--files-from")
         else
-          echo -e "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
+          echo "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
           exit 1
         fi
 
         echo -n "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
         tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
         if [[ $? -ne 0 ]]; then
-          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
         else
           echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -206,9 +206,9 @@ runs:
       run: |
         set +e
 
-        ANSI_LIGHT_RED="\e[91m"
-        ANSI_LIGHT_GREEN="\e[92m"
-        ANSI_NOCOLOR="\e[0m"
+        ANSI_LIGHT_RED="\x1b[91m"
+        ANSI_LIGHT_GREEN="\x1b[92m"
+        ANSI_NOCOLOR="\x1b[0m"
 
         echo -n "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"

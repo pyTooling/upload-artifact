@@ -22,8 +22,15 @@ on:
 
 jobs:
   Build-1:
-    name: Build 1 - Upload artifact
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
 
     steps:
       - name: 🖉 Build 1
@@ -31,19 +38,19 @@ jobs:
           echo "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
           echo "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
           echo "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
-          
+
           mkdir -p bin
           echo "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > bin/program.py
           chmod u+x bin/program.py
           echo "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/tool.py
           chmod g+x bin/tool.py
-          
+
           mkdir -p lib
           echo "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/common.py
           chmod +x lib/common.py
           echo "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/shared.py
           chmod +x lib/shared.py
-          
+
           mkdir -p lib/gui
           echo "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > lib/gui/main.py
           chmod +x lib/gui/main.py
@@ -54,184 +61,191 @@ jobs:
         run: |
           tree .
 
-      - name: 📤 Upload artifact 'github-release'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: github-release
+          name: ${{ matrix.os.name }}-github-release
           path: |
             document1.txt
             *.log
             bin/*.py
             lib/
 
-      - name: 📤 Upload artifact 'pyTooling-release'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-release'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-release
+          name: ${{ matrix.os.name }}-pyTooling-release
           path: |
             document1.txt
             *.log
             bin/*.py
             lib/
 
-      - name: 📤 Upload artifact 'pyTooling-lib'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-lib'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-lib
+          name: ${{ matrix.os.name }}-pyTooling-lib
           working-directory: lib
           path: |
             **/*.py
 
-      - name: 📤 Upload artifact 'github-single-file'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-single-file
+          name: ${{ matrix.os.name }}-github-single-file
           path: |
             document1.txt
 
-      - name: 📤 Upload artifact 'pyTooling-single-file'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-single-file'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-single-file
+          name: ${{ matrix.os.name }}-pyTooling-single-file
           path: |
             document1.txt
 
-      - name: 📤 Upload artifact 'github-single-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-single-file-in-directory
+          name: ${{ matrix.os.name }}-github-single-file-in-directory
           path: |
             bin/program.py
 
-      - name: 📤 Upload artifact 'pyTooling-single-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-single-file-in-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-single-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-single-file-in-directory
           path: |
             bin/program.py
 
-      - name: 📤 Upload artifact 'github-double-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-double-file-in-directory
+          name: ${{ matrix.os.name }}-github-double-file-in-directory
           path: |
             bin/program.py
             bin/tool.py
 
-      - name: 📤 Upload artifact 'pyTooling-double-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-double-file-in-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-double-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-file-in-directory
           path: |
             bin/program.py
             bin/tool.py
 
-      - name: 📤 Upload artifact 'github-triple-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-triple-file-in-directory
+          name: ${{ matrix.os.name }}-github-triple-file-in-directory
           path: |
             lib/common.py
             lib/gui/main.py
             lib/gui/dialog.py
 
-      - name: 📤 Upload artifact 'pyTooling-triple-file-in-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-triple-file-in-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-triple-file-in-directory
+          name: ${{ matrix.os.name }}-pyTooling-triple-file-in-directory
           path: |
             lib/common.py
             lib/gui/main.py
             lib/gui/dialog.py
 
-      - name: 📤 Upload artifact 'github-double-file-in-deep-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-double-file-in-deep-directory
+          name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
           path: |
             lib/gui/main.py
             lib/gui/dialog.py
 
-      - name: 📤 Upload artifact 'pyTooling-double-file-in-deep-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-double-file-in-deep-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-double-file-in-deep-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-file-in-deep-directory
           path: |
             lib/gui/main.py
             lib/gui/dialog.py
 
-      - name: 📤 Upload artifact 'github-single-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-single-directory
+          name: ${{ matrix.os.name }}-github-single-directory
           path: |
             bin
 
-      - name: 📤 Upload artifact 'pyTooling-single-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-single-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-single-directory
+          name: ${{ matrix.os.name }}-pyTooling-single-directory
           path: |
             bin
 
-      - name: 📤 Upload artifact 'github-double-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-double-directory
+          name: ${{ matrix.os.name }}-github-double-directory
           path: |
             bin
             lib
 
-      - name: 📤 Upload artifact 'pyTooling-double-directory'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-double-directory'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-double-directory
+          name: ${{ matrix.os.name }}-pyTooling-double-directory
           path: |
             bin
             lib
 
-      - name: 📤 Upload artifact 'github-unpredictable-wildcard'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: github-unpredictable-wildcard
+          name: ${{ matrix.os.name }}-github-unpredictable-wildcard
           path: |
             lib/gui/main.py
             lib/gui/dialog.py
             *.foo
 
-      - name: 📤 Upload artifact 'pyTooling-unpredictable-wildcard'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-unpredictable-wildcard'
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
-          name: pyTooling-unpredictable-wildcard
+          name: ${{ matrix.os.name }}-pyTooling-unpredictable-wildcard
           path: |
             lib/gui/main.py
             lib/gui/dialog.py
             *.foo
 
   Verify-0:
-    name: Verify artifact content
-    runs-on: ubuntu-24.04
+    name: ${{ matrix.os.icon }} Verify artifact content on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
     needs:
       - Build-1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
 
     steps:
       - name: 📥 Download artifact
@@ -243,37 +257,37 @@ jobs:
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\e[91m"
-          ANSI_LIGHT_GREEN="\e[92m"
-          ANSI_NOCOLOR="\e[0m"
-          
+          ANSI_LIGHT_RED="\x1b[91m"
+          ANSI_LIGHT_GREEN="\x1b[92m"
+          ANSI_NOCOLOR="\x1b[0m"
+
           echo "List directory content"
-          ls -lAh . 
+          ls -lAh .
           echo "----------------------------------------"
-          
+
           echo -n "Does tarball exist ... "
           if [[ ! -f __pyTooling_upload_artifact__.tar ]]; then
-            echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            echo -e "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
             exit 1
           else
-            echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
 
       - name: 📦 Extract tarball
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\e[91m"
-          ANSI_LIGHT_GREEN="\e[92m"
-          ANSI_NOCOLOR="\e[0m"
-          
+          ANSI_LIGHT_RED="\x1b[91m"
+          ANSI_LIGHT_GREEN="\x1b[92m"
+          ANSI_NOCOLOR="\x1b[0m"
+
           echo -n "Extracting tarball ... "
           tar -xf __pyTooling_upload_artifact__.tar
           if [[ $? -ne 0 ]]; then
-            echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           else
-            echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
 
       - name: 🔎 Inspect extracted tarball
@@ -284,9 +298,9 @@ jobs:
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\e[91m"
-          ANSI_LIGHT_GREEN="\e[92m"
-          ANSI_NOCOLOR="\e[0m"
+          ANSI_LIGHT_RED="\x1b[91m"
+          ANSI_LIGHT_GREEN="\x1b[92m"
+          ANSI_NOCOLOR="\x1b[0m"
 
           expected=(
             "document1.txt"
@@ -296,57 +310,57 @@ jobs:
             "lib/common.py"
           )
 
-          errors=0          
+          errors=0
           for file in "${expected[@]}"; do
             echo -n "Checking '${file}' ... "
             if [[ -f "$file" ]]; then
-              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
             else
-              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-              echo -e "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
               errors=$((errors + 1))
-            fi  
+            fi
           done
-          
+
           echo ""
           if [[ $errors -ne 0 ]]; then
-            echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
             exit 1
           else
-            echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
           fi
 
       - name: 📋 Verify file permissions
         run: |
           set +e
 
-          ANSI_LIGHT_RED="\e[91m"
-          ANSI_LIGHT_GREEN="\e[92m"
-          ANSI_NOCOLOR="\e[0m"
+          ANSI_LIGHT_RED="\x1b[91m"
+          ANSI_LIGHT_GREEN="\x1b[92m"
+          ANSI_NOCOLOR="\x1b[0m"
 
           expected=(
             "bin/program.py"
             "lib/common.py"
           )
 
-          errors=0          
+          errors=0
           for file in "${expected[@]}"; do
             echo -n "Checking '${file}' ... "
             if [[ -x "$file" ]]; then
-              echo -e "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
             else
-              echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-              echo -e "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+              echo "${ANSI_LIGHT_RED}File '${file}' isn't executable.${ANSI_NOCOLOR}"
               errors=$((errors + 1))
-            fi  
+            fi
           done
-          
+
           echo ""
           if [[ $errors -ne 0 ]]; then
-            echo -e "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
             exit 1
           else
-            echo -e "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+            echo "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
           fi
 
   Inspect-1:
