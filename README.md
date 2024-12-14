@@ -90,8 +90,8 @@ This action uses `tar` as provided by the GitHub runner's operating system image
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
 
-To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=0` and
-`--group=0` are used when creating the tarball.
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
+`--group=root:0` are used when creating the tarball.
 
 
 ### On macOS (BSD tar)
@@ -108,7 +108,8 @@ as a command line option.
 > 
 > Source: https://man.freebsd.org/cgi/man.cgi?tar(1)
 
-⚠ BSD tar doesn't support a `--owner=0` and `--group=0` option.
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--gname=root`, `--gid=0`,
+`--uname=root` and `--uid=0` are used when creating the tarball.
 
 
 ### On Windows (GNU tar)
@@ -116,8 +117,8 @@ as a command line option.
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
 
-To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=0` and
-`--group=0` are used when creating the tarball.
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
+`--group=root:0` are used when creating the tarball.
 
 
 ## Dependencies
