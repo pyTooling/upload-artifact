@@ -105,6 +105,7 @@ runs:
       shell: bash
       run: |
         set +e
+        shopt -s globstar
 
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'

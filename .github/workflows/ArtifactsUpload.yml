@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build-1:
+  Build:
     name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
@@ -215,7 +215,7 @@ jobs:
     name: ${{ matrix.os.icon }} Verify artifact content on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -296,7 +296,7 @@ jobs:
     name: ${{ matrix.os.icon }} Single file ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -335,7 +335,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect single file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -382,7 +382,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect double file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -431,7 +431,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect triple file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -482,7 +482,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect double file in deep directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -531,7 +531,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect single directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -580,7 +580,7 @@ jobs:
     name: ${{ matrix.os.icon }} Inspect double directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -637,7 +637,7 @@ jobs:
     name: ${{ matrix.os.icon }} Unpredictable Wildcard ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
@@ -671,27 +671,28 @@ jobs:
         if: matrix.task.name == 'inspect'
         with:
           files: |
-            common.py
+            lib/gui/main.py
+            lib/gui/dialog.py
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
           files: |
-            common.py
+            lib/gui/main.py
+            lib/gui/dialog.py
 
   Verify-9:
     name: Verify lib directory
     runs-on: ubuntu-24.04
     needs:
-      - Build-1
+      - Build
     strategy:
       fail-fast: false
       matrix:
         os:
           - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
         task:
-#          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
 
     steps:
