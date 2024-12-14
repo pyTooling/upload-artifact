@@ -1,0 +1,56 @@
+# The MIT License (MIT)
+#
+# Copyright © 2024 The pyTooling Authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+# documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+# persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+# Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+name: Create test files
+description: Create an artificial directory and file structure
+
+runs:
+  using: composite
+  steps:
+    - name: 🖉 Create some artificial file and directory structures
+      shell: bash
+      run: |
+        printf "%s\n" "Root"
+        printf "%s\n" "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
+        printf "%s\n" "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
+        printf "%s\n" "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
+
+        printf "%s\n" "bin/"
+        mkdir -p bin
+        printf "%s\n" "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/program.py
+        chmod u+x bin/program.py
+        printf "%s\n" "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"         > bin/tool.py
+        chmod g+x bin/tool.py
+
+        printf "%s\n" "lib/"
+        mkdir -p lib
+        printf "%s\n" "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/common.py
+        chmod +x lib/common.py
+        printf "%s\n" "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/shared.py
+        chmod +x lib/shared.py
+
+        printf "%s\n" "lib/gui/"
+        mkdir -p lib/gui
+        printf "%s\n" "Library 3 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/main.py
+        chmod +x lib/gui/main.py
+        printf "%s\n" "Library 4 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/gui/dialog.py
+        chmod +x lib/gui/dialog.py
+
+    - name: 🔎 Inspect directory structure
+      if: runner.os != 'macOS' && runner.os != 'Windows'
+      shell: bash
+      run: |
+        tree .

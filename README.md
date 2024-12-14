@@ -6,6 +6,18 @@ is not implemented by GitHub until now (requested on [05.12.2019](https://github
 and still delayed and/or refused? to be implemented in the future. According to GitHub, the internal API doesn't allow
 the implementation of such a feature, but this actions is demonstrating a working solution.
 
+See [pyTooling/download-artifact](https://github.com/pyTooling/download-artifact) for the matching download action.
+
+## Advantages Compared to Competing GitHub Actions
+
+* Support all parameters of `actions/upload-artifact`.  
+	(Others support only a subset.)
+* Supports Ubuntu, Windows and macOS GitHub Runner images.  
+	(Others are created for Linux only.)
+* Well-defined behavior of tarball internal directory/file structure.  
+	(No silent and "unpredictable" removal of common prefixes.)
+* Store files in tarball without owner and group information.
+* Testcases implemented as a pipeline verifying uploads/downloads using a tarball.
 
 ## Usage
 
@@ -53,7 +65,7 @@ jobs:
 
 | Parameter      | Description                                                                                                                                                                                                                                                                                    |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `artifact-id`  | GitHub ID of an Artifact, can be used by the REST API                                                                                                                                                                                                                                          |
+| `artifact-id`  | GitHub ID of an Artifact, can be used by the REST API.                                                                                                                                                                                                                                         |
 | `artifact-url` | URL to download an Artifact. Can be used in many scenarios such as linking to artifacts in issues or pull requests. Users must be logged-in in order for this URL to work. This URL is valid as long as the artifact has not expired or the artifact, run or repository have not been deleted. |
 
 
@@ -78,6 +90,9 @@ This action uses `tar` as provided by the GitHub runner's operating system image
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
 
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
+`--group=root:0` are used when creating the tarball.
+
 
 ### On macOS (BSD tar)
 
@@ -93,16 +108,29 @@ as a command line option.
 > 
 > Source: https://man.freebsd.org/cgi/man.cgi?tar(1)
 
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--gname=root`, `--gid=0`,
+`--uname=root` and `--uid=0` are used when creating the tarball.
+
 
 ### On Windows (GNU tar)
 
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
 
+To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
+`--group=root:0` are used when creating the tarball.
+
 
 ## Dependencies
 
 * [actions/upload-artifact@v4](https://github.com/actions/upload-artifact)
+
+
+## Competing Actions
+
+* [eviden-actions/upload-artifact](https://github.com/eviden-actions/upload-artifact)
+* [nmerget/upload-gzip-artifact](https://github.com/nmerget/upload-gzip-artifact)
+* [alehechka/upload-tartifact](https://github.com/alehechka/upload-tartifact)
 
 
 ## Contributors
