@@ -278,12 +278,20 @@ jobs:
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
         with:
-          files: |
+          expected-files: |
             document1.txt
             analysis.log
             build.log
             bin/program.py
+            bin/tool.py
             lib/common.py
+            lib/shared.py
+            lib/gui/main.py
+            lib/gui/dialog.py
+          unexpected-files: |
+            .config
+            bin/.settings
+            lib/.library
 
       - name: 📋 Verify file permissions
         uses: ./.github/actions/file-is-executable
@@ -291,6 +299,7 @@ jobs:
           files: |
             bin/program.py
             lib/common.py
+            lib/shared.py
 
   Inspect-1:
     name: ${{ matrix.os.icon }} Single file ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -328,7 +337,7 @@ jobs:
       - name: 📋 Verify artifact content
         uses: ./.github/actions/check-directory-content
         with:
-          files: |
+          expected-files: |
             document1.txt
 
   Inspect-2:
@@ -368,14 +377,14 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             program.py
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             bin/program.py
 
   Inspect-3:
@@ -415,7 +424,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             program.py
             tool.py
 
@@ -423,7 +432,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             bin/program.py
             bin/tool.py
 
@@ -464,7 +473,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             common.py
             gui/main.py
             gui/dialog.py
@@ -473,7 +482,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             lib/common.py
             lib/gui/main.py
             lib/gui/dialog.py
@@ -515,7 +524,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             main.py
             dialog.py
 
@@ -523,7 +532,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             lib/gui/main.py
             lib/gui/dialog.py
 
@@ -564,7 +573,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             program.py
             tool.py
 
@@ -572,7 +581,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             bin/program.py
             bin/tool.py
 
@@ -613,7 +622,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             bin/program.py
             bin/tool.py
             lib/common.py
@@ -625,7 +634,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             bin/program.py
             bin/tool.py
             lib/common.py
@@ -670,7 +679,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'inspect'
         with:
-          files: |
+          expected-files: |
             lib/gui/main.py
             lib/gui/dialog.py
 
@@ -678,7 +687,7 @@ jobs:
         uses: ./.github/actions/check-directory-content
         if: matrix.task.name == 'verify'
         with:
-          files: |
+          expected-files: |
             lib/gui/main.py
             lib/gui/dialog.py
 
@@ -717,7 +726,7 @@ jobs:
       - name: 📋 Verify artifact content downloaded via 'actions/download-artifact'
         uses: ./.github/actions/check-directory-content
         with:
-          files: |
+          expected-files: |
             common.py
             shared.py
             gui/dialog.py

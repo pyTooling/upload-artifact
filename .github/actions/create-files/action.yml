@@ -23,13 +23,17 @@ runs:
     - name: 🖉 Create some artificial file and directory structures
       shell: bash
       run: |
+        # 🖉 Create some artificial file and directory structures
+
         printf "%s\n" "Root"
-        printf "%s\n" "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"   > document1.txt
-        printf "%s\n" "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')" > analysis.log
-        printf "%s\n" "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > build.log
+        printf "%s\n" "Document 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > document1.txt
+        printf "%s\n" "Analysis log $(date --utc '+%d.%m.%Y - %H:%M:%S')"  > analysis.log
+        printf "%s\n" "Build log $(date --utc '+%d.%m.%Y - %H:%M:%S')"     > build.log
+        printf "%s\n" "Configuration $(date --utc '+%d.%m.%Y - %H:%M:%S')" > .config
 
         printf "%s\n" "bin/"
         mkdir -p bin
+        printf "%s\n" "Settings $(date --utc '+%d.%m.%Y - %H:%M:%S')"     > bin/.settings
         printf "%s\n" "Program $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > bin/program.py
         chmod u+x bin/program.py
         printf "%s\n" "Tool $(date --utc '+%d.%m.%Y - %H:%M:%S')"         > bin/tool.py
@@ -37,6 +41,7 @@ runs:
 
         printf "%s\n" "lib/"
         mkdir -p lib
+        printf "%s\n" "Library $(date --utc '+%d.%m.%Y - %H:%M:%S')"      > lib/.library
         printf "%s\n" "Library 1 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/common.py
         chmod +x lib/common.py
         printf "%s\n" "Library 2 $(date --utc '+%d.%m.%Y - %H:%M:%S')"    > lib/shared.py
@@ -53,4 +58,4 @@ runs:
       if: runner.os != 'macOS' && runner.os != 'Windows'
       shell: bash
       run: |
-        tree .
+        tree -pash .

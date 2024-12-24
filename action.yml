@@ -139,6 +139,16 @@ runs:
           tarDirectory=""
         fi
 
+        if [[ "${{ inputs.include-hidden-files }}" == "true" ]]; then
+          printf "%s" "Enable glob for dot-files (hidden files) ... "
+          shopt -s dotglob
+          if [[ $? -ne 0 ]]; then
+            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          else
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          fi
+        fi
+
         printf "%s" "Convert provided file patterns to a single line ... "
         PATTERNS=()
         while IFS=$'\r\n' read -r pattern; do
