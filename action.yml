@@ -184,10 +184,11 @@ runs:
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
           exit 1
         else
-          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-        echo -e "${ANSI_CYAN}Files collected: $(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)${ANSI_NOCOLOR}"
+        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)
+        printf "%s\n" "${ANSI_CYAN}Files collected: $fileCount${ANSI_NOCOLOR}"
 
     # https://github.com/actions/upload-artifact
     - name: Upload artifact
@@ -200,7 +201,7 @@ runs:
         retention-days: ${{ inputs.retention-days }}
         compression-level: ${{ inputs.compression-level }}
         overwrite: ${{ inputs.overwrite }}
-        include-hidden-files: ${{ inputs.include-hidden-files }}
+#        include-hidden-files:
 
     - name: Remove temporary tarball
       id: cleanup
@@ -215,7 +216,7 @@ runs:
         printf "%s" "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
-          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
         else
-          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
