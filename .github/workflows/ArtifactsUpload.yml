@@ -31,6 +31,9 @@ jobs:
           - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
           - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
           - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -279,6 +282,9 @@ jobs:
           - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
           - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
           - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -291,6 +297,8 @@ jobs:
 
       - name: 🔎 Inspect downloaded artifact content
         uses: ./.github/actions/check-artifact-content
+        with:
+          must-exist: true
 
       - name: 📦 Extract tarball
         run: |
@@ -348,6 +356,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -387,6 +398,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -434,6 +448,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -483,6 +500,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -534,6 +554,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -583,6 +606,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -632,6 +658,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -689,6 +718,9 @@ jobs:
         task:
           - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -737,6 +769,9 @@ jobs:
           - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
         task:
           - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions

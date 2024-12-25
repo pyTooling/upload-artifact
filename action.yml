@@ -233,6 +233,28 @@ runs:
         printf "  %s\n" "${ANSI_CYAN}Directories: ${dirCount}${ANSI_NOCOLOR}"
         printf "  %s\n" "${ANSI_CYAN}Files:       ${fileCount}${ANSI_NOCOLOR}"
 
+    - name: Remove dot-files if not explicitly included
+      id: clean
+      if:  inputs.include-hidden-files == 'false'
+      shell: bash
+      run: |
+        # List content of the generated tarball
+        set +e
+
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
+        while IFS=$'\r\n' read -r file; do
+          printf "  %s\n" "${file}"
+          tar -vf "${{ inputs.tarball-name }}" --delete "${file}"
+        done <<<$(tar -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+        printf "::endgroup::\n"
+
     - name: List content of the generated tarball
       id: debug
       if: inputs.mode == 'tar' && inputs.debug == 'true'
