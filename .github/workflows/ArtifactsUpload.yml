@@ -224,8 +224,8 @@ jobs:
             lib/gui/dialog.py
             *.foo
 
-  Verify-0:
-    name: ${{ matrix.os.icon }} Verify artifact content on ${{ matrix.os.name }}
+  Verify-Github:
+    name: ${{ matrix.os.icon }} Verify (GitHub) artifact content on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
       - Build
@@ -247,25 +247,50 @@ jobs:
           name: ${{ matrix.os.name }}-github-release
 
       - name: 🔎 Inspect downloaded artifact content
-        run: |
-          set +e
+        uses: ./.github/actions/check-artifact-content
 
-          ANSI_LIGHT_RED=$'\x1b[91m'
-          ANSI_LIGHT_GREEN=$'\x1b[92m'
-          ANSI_NOCOLOR=$'\x1b[0m'
+      - name: 📋 Verify extracted tarball content
+        uses: ./.github/actions/check-directory-content
+        with:
+          expected-files: |
+            document1.txt
+            analysis.log
+            build.log
+            bin/program.py
+            bin/tool.py
+            lib/common.py
+            lib/shared.py
+            lib/gui/main.py
+            lib/gui/dialog.py
+          unexpected-files: |
+            .config
+            bin/.settings
+            lib/.library
 
-          printf "%s\n" "List directory content"
-          ls -lAh .
-          printf "%s\n" "----------------------------------------"
+  Verify-pyTooling:
+    name: ${{ matrix.os.icon }} Verify (pyTooling) artifact content on ${{ matrix.os.name }}
+    runs-on: ${{ matrix.os.image }}
+    needs:
+      - Build
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
 
-          printf "%s" "Does tarball exist ... "
-          if [[ ! -f __pyTooling_upload_artifact__.tar ]]; then
-            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            printf "%s\n" "${ANSI_LIGHT_RED}Artifact doesn't contain a tar file named '__pyTooling_upload_artifact__.tar'.${ANSI_NOCOLOR}"
-            exit 1
-          else
-            printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
-          fi
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - name: 📥 Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.os.name }}-pyTooling-release
+
+      - name: 🔎 Inspect downloaded artifact content
+        uses: ./.github/actions/check-artifact-content
 
       - name: 📦 Extract tarball
         run: |
@@ -282,11 +307,6 @@ jobs:
           else
             printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
           fi
-
-      - name: 🔎 Inspect extracted tarball
-        if: runner.os != 'macOS'
-        run: |
-          tree .
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
