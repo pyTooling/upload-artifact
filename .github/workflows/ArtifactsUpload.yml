@@ -85,6 +85,25 @@ jobs:
           path: |
             **/*.py
 
+  Build-single-file:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -101,6 +120,25 @@ jobs:
           path: |
             document1.txt
 
+  Build-single-file-in-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -117,6 +155,25 @@ jobs:
           path: |
             bin/program.py
 
+  Build-double-file-in-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -135,6 +192,25 @@ jobs:
             bin/program.py
             bin/tool.py
 
+  Build-triple-file-in-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -155,6 +231,25 @@ jobs:
             lib/gui/main.py
             lib/gui/dialog.py
 
+  Build-double-file-in-deep-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -173,6 +268,25 @@ jobs:
             lib/gui/main.py
             lib/gui/dialog.py
 
+  Build-single-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -189,6 +303,25 @@ jobs:
           path: |
             bin
 
+  Build-double-directory:
+    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -207,6 +340,26 @@ jobs:
             bin
             lib
 
+
+  Build-unpredictable-wildcard:
+    name: ${{ matrix.os.icon }} Build unpredictable-wildcard on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
         uses: actions/upload-artifact@v4
         continue-on-error: true
@@ -226,6 +379,43 @@ jobs:
             lib/gui/main.py
             lib/gui/dialog.py
             *.foo
+
+  Build-no-files:
+    name: ${{ matrix.os.icon }} Build no-files on ${{ matrix.os.name }} - Upload artifact
+    runs-on: ${{ matrix.os.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
+          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: ⏬ Checkout repository to use local actions
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/create-files
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-nofile' with warning
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: ${{ matrix.os.name }}-github-nofile
+          if-no-files-found: warn
+          path: |
+            *.dll
+
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-nofile' with warning
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: ${{ matrix.os.name }}-github-nofile
+          if-no-files-found: warn
+          path: |
+            *.dll
 
   Verify-Github:
     name: ${{ matrix.os.icon }} Verify (GitHub) artifact content on ${{ matrix.os.name }}
@@ -344,11 +534,11 @@ jobs:
             lib/common.py
             lib/shared.py
 
-  Inspect-1:
+  Inspect-single-file:
     name: ${{ matrix.os.icon }} Single file ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-single-file
     strategy:
       fail-fast: false
       matrix:
@@ -398,11 +588,11 @@ jobs:
             lib/gui/main.py
             lib/gui/dialog.py
 
-  Inspect-2:
+  Inspect-single-file-in-directory:
     name: ${{ matrix.os.icon }} Inspect single file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-single-file-in-directory
     strategy:
       fail-fast: false
       matrix:
@@ -454,11 +644,11 @@ jobs:
             bin/tool.py
             bin/.settings
 
-  Inspect-3:
+  Inspect-double-file-in-directory:
     name: ${{ matrix.os.icon }} Inspect double file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-double-file-in-directory
     strategy:
       fail-fast: false
       matrix:
@@ -510,11 +700,11 @@ jobs:
           unexpected-files: |
             bin/.settings
 
-  Inspect-4:
+  Inspect-triple-file-in-directory:
     name: ${{ matrix.os.icon }} Inspect triple file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-triple-file-in-directory
     strategy:
       fail-fast: false
       matrix:
@@ -570,11 +760,11 @@ jobs:
             lib/shared.py
             lib/.library
 
-  Inspect-5:
+  Inspect-double-file-in-deep-directory:
     name: ${{ matrix.os.icon }} Inspect double file in deep directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-double-file-in-deep-directory
     strategy:
       fail-fast: false
       matrix:
@@ -622,11 +812,11 @@ jobs:
             lib/gui/main.py
             lib/gui/dialog.py
 
-  Inspect-6:
+  Inspect-single-directory:
     name: ${{ matrix.os.icon }} Inspect single directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-single-directory
     strategy:
       fail-fast: false
       matrix:
@@ -678,11 +868,11 @@ jobs:
           unexpected-files: |
             bin/.settings
 
-  Inspect-7:
+  Inspect-double-directory:
     name: ${{ matrix.os.icon }} Inspect double directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-double-directory
     strategy:
       fail-fast: false
       matrix:
@@ -744,11 +934,11 @@ jobs:
             bin/.settings
             lib/.library
 
-  Inspect-8:
+  Inspect-unpredictable-wildcard:
     name: ${{ matrix.os.icon }} Unpredictable Wildcard ${{ matrix.task.action }} on ${{ matrix.os.name }}
     runs-on: ${{ matrix.os.image }}
     needs:
-      - Build
+      - Build-unpredictable-wildcard
     strategy:
       fail-fast: false
       matrix:
@@ -803,7 +993,6 @@ jobs:
             lib/common.py
             lib/shared.py
             lib/.library
-
 
   Verify-9:
     name: Verify lib directory
