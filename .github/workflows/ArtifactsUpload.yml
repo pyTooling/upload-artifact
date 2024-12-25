@@ -86,7 +86,7 @@ jobs:
             **/*.py
 
   Build-single-file:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build single-file on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -121,7 +121,7 @@ jobs:
             document1.txt
 
   Build-single-file-in-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build single-file-in-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -156,7 +156,7 @@ jobs:
             bin/program.py
 
   Build-double-file-in-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build double-file-in-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -193,7 +193,7 @@ jobs:
             bin/tool.py
 
   Build-triple-file-in-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build triple-file-in-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -232,7 +232,7 @@ jobs:
             lib/gui/dialog.py
 
   Build-double-file-in-deep-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build double-file-in-deep-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -269,7 +269,7 @@ jobs:
             lib/gui/dialog.py
 
   Build-single-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build single-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false
@@ -304,7 +304,7 @@ jobs:
             bin
 
   Build-double-directory:
-    name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
+    name: ${{ matrix.os.icon }} Build double-directory on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
     strategy:
       fail-fast: false

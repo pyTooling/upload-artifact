@@ -236,6 +236,19 @@ runs:
         printf "  %s\n" "${ANSI_CYAN}Directories: ${dirCount}${ANSI_NOCOLOR}"
         printf "  %s\n" "${ANSI_CYAN}Files:       ${fileCount}${ANSI_NOCOLOR}"
 
+        if [[ $fileCount -eq 0 ]]; then
+          if [[ "${{ inputs.if-no-files-found }}" == "error" ]]; then
+            printf "::error title=%s::%s\n" "${{ github.job }} - pyTooling/upload-artifact" "No files found for given pattern."
+            exit 1
+          elif [[ "${{ inputs.if-no-files-found }}" == "warn" ]]; then
+            printf "::warning title=%s::%s\n" "${{ github.job }} - pyTooling/upload-artifact" "No files found for given pattern."
+          elif [[ "${{ inputs.if-no-files-found }}" == "ignore" ]]; then
+            printf "%s\n" "No files found for given pattern."
+          else
+            printf "%s\n" "Unknown option '${{ inputs.if-no-files-found }}'."
+          fi
+        fi
+
     - name: Remove dot-files if not explicitly included
       id: clean
       if:  inputs.include-hidden-files == 'false'
