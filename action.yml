@@ -157,21 +157,22 @@ runs:
             fi
           else
             printf "%s\n" "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Directory '${{ inputs.working-directory }}' doesn't exist."
             exit 1
           fi
         else
           tarDirectory=""
         fi
 
-        if [[ "${{ inputs.include-hidden-files }}" == "true" ]]; then
-          printf "%s" "Enable glob for dot-files (hidden files) ... "
-          shopt -s dotglob
-          if [[ $? -ne 0 ]]; then
-            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-          else
-            printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
-          fi
-        fi
+        #if [[ "${{ inputs.include-hidden-files }}" == "true" ]]; then
+        #  printf "%s" "Enable glob for dot-files (hidden files) ... "
+        #  shopt -s dotglob
+        #  if [[ $? -ne 0 ]]; then
+        #    printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        #  else
+        #    printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        #  fi
+        #fi
 
         printf "%s" "Convert provided file patterns to a single line ... "
         PATTERNS=()
@@ -215,13 +216,15 @@ runs:
           filesFrom=("--verbatim-files-from" "--files-from")
         else
           printf "%s\n" "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Unsupported runner OS '${{ runner.os }}'."
           exit 1
         fi
 
         printf "%s" "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
-        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
+        msg=$(tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}"))
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "::error file=%s,title=%s::%s\n" "${{ inputs.tarball-name }}" "pyTooling/upload-artifact" "tar: ${msg}"
           exit 1
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -248,12 +251,16 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
-        printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
-        while IFS=$'\r\n' read -r file; do
-          printf "  %s\n" "${file}"
-          tar -vf "${{ inputs.tarball-name }}" --delete "${file}"
-        done <<<$(tar -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
-        printf "::endgroup::\n"
+        if [[ "${{ runner.os }}" != "macOS" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
+          while IFS=$'\r\n' read -r file; do
+            printf "  %s\n" "${file}"
+            tar -vf "${{ inputs.tarball-name }}" --delete "${file}"
+          done <<<$(tar -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+          printf "::endgroup::\n"
+        else
+          printf "::warning title=%s::%s\n" "pyTooling/upload-artifact" "macOS doesn't support removing hidden files."
+        fi
 
     - name: List content of the generated tarball
       id: debug
@@ -311,6 +318,7 @@ runs:
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "::warning file=%s,title=%s::%s\n" "${{ inputs.tarball-name }}" ""pyTooling/upload-artifact"" "Can't remove tarball '${{ inputs.tarball-name }}'."
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
