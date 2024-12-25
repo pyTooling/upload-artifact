@@ -56,11 +56,13 @@ runs:
             printf "%s\n" "${ANSI_LIGHT_GREEN}[YES]${ANSI_NOCOLOR}"
           else
             printf "%s\n" "${ANSI_LIGHT_RED}[YES]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-artifact-content" "Tarball '${{ inputs.tarball }}' wasn't removed."
             exit 1
           fi
         else
           if [[ "${{ inputs.must-exist }}" == "true" ]]; then
             printf "%s\n" "${ANSI_LIGHT_RED}[NO]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-artifact-content" "Tarball '${{ inputs.tarball }}' is missing."
             exit 1
           else
             printf "%s\n" "${ANSI_LIGHT_GREEN}[NO]${ANSI_NOCOLOR}"

@@ -336,6 +336,7 @@ jobs:
 
       - name: 📋 Verify file permissions
         uses: ./.github/actions/file-is-executable
+        if: matrix.os.name != 'Windows'
         with:
           files: |
             bin/program.py
@@ -384,6 +385,18 @@ jobs:
         with:
           expected-files: |
             document1.txt
+          unexpected-files: |
+            .config
+            analysis.log
+            build.log
+            bin/program.py
+            bin/tool.py
+            bin/.settings
+            lib/common.py
+            lib/shared.py
+            lib/.library
+            lib/gui/main.py
+            lib/gui/dialog.py
 
   Inspect-2:
     name: ${{ matrix.os.icon }} Inspect single file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -427,6 +440,9 @@ jobs:
         with:
           expected-files: |
             program.py
+          unexpected-files: |
+            tool.py
+            .settings
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -434,6 +450,9 @@ jobs:
         with:
           expected-files: |
             bin/program.py
+          unexpected-files: |
+            bin/tool.py
+            bin/.settings
 
   Inspect-3:
     name: ${{ matrix.os.icon }} Inspect double file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -478,6 +497,8 @@ jobs:
           expected-files: |
             program.py
             tool.py
+          unexpected-files: |
+            .settings
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -486,6 +507,8 @@ jobs:
           expected-files: |
             bin/program.py
             bin/tool.py
+          unexpected-files: |
+            bin/.settings
 
   Inspect-4:
     name: ${{ matrix.os.icon }} Inspect triple file in directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -531,6 +554,9 @@ jobs:
             common.py
             gui/main.py
             gui/dialog.py
+          unexpected-files: |
+            shared.py
+            .library
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -540,6 +566,9 @@ jobs:
             lib/common.py
             lib/gui/main.py
             lib/gui/dialog.py
+          unexpected-files: |
+            lib/shared.py
+            lib/.library
 
   Inspect-5:
     name: ${{ matrix.os.icon }} Inspect double file in deep directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -636,6 +665,8 @@ jobs:
           expected-files: |
             program.py
             tool.py
+          unexpected-files: |
+            .settings
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -644,6 +675,8 @@ jobs:
           expected-files: |
             bin/program.py
             bin/tool.py
+          unexpected-files: |
+            bin/.settings
 
   Inspect-7:
     name: ${{ matrix.os.icon }} Inspect double directory ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -692,6 +725,9 @@ jobs:
             lib/shared.py
             lib/gui/main.py
             lib/gui/dialog.py
+          unexpected-files: |
+            bin/.settings
+            lib/.library
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -704,6 +740,9 @@ jobs:
             lib/shared.py
             lib/gui/main.py
             lib/gui/dialog.py
+          unexpected-files: |
+            bin/.settings
+            lib/.library
 
   Inspect-8:
     name: ${{ matrix.os.icon }} Unpredictable Wildcard ${{ matrix.task.action }} on ${{ matrix.os.name }}
@@ -748,6 +787,10 @@ jobs:
           expected-files: |
             lib/gui/main.py
             lib/gui/dialog.py
+          unexpected-files: |
+            lib/common.py
+            lib/shared.py
+            lib/.library
 
       - name: 📋 Verify extracted tarball content
         uses: ./.github/actions/check-directory-content
@@ -756,6 +799,11 @@ jobs:
           expected-files: |
             lib/gui/main.py
             lib/gui/dialog.py
+          unexpected-files: |
+            lib/common.py
+            lib/shared.py
+            lib/.library
+
 
   Verify-9:
     name: Verify lib directory
@@ -800,3 +848,5 @@ jobs:
             shared.py
             gui/dialog.py
             gui/main.py
+          unexpected-files: |
+            .library

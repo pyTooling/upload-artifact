@@ -224,7 +224,7 @@ runs:
         msg=$(tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}"))
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-          printf "::error file=%s,title=%s::%s\n" "${{ inputs.tarball-name }}" "pyTooling/upload-artifact" "tar: ${msg}"
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "tar: ${msg}"
           exit 1
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
@@ -318,7 +318,7 @@ runs:
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-          printf "::warning file=%s,title=%s::%s\n" "${{ inputs.tarball-name }}" ""pyTooling/upload-artifact"" "Can't remove tarball '${{ inputs.tarball-name }}'."
+          printf "::warning title=%s::%s\n" "pyTooling/upload-artifact" "Can't remove tarball '${{ inputs.tarball-name }}'."
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi

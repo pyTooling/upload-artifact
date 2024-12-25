@@ -47,6 +47,7 @@ runs:
             printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
           else
             printf "%s\n" "${ANSI_LIGHT_RED}[MISSING]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' is missing."
             errors=$((errors + 1))
           fi
         done <<<'${{ inputs.expected-files }}'
@@ -77,6 +78,7 @@ runs:
           printf "%s" "Checking '${file}' ... "
           if [[ -f "$file" ]]; then
             printf "%s\n" "${ANSI_LIGHT_RED}[UNEXPECTED]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' is unexpected."
             errors=$((errors + 1))
           else
             printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"

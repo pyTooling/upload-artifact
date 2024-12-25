@@ -44,6 +44,7 @@ runs:
             printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
           else
             printf "%s\n" "${ANSI_LIGHT_RED}[NOT EXECUTABLE]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "file-is-executable" "File '${file}' isn't executable."
             errors=$((errors + 1))
           fi
         done <<<'${{ inputs.files }}'

@@ -109,6 +109,10 @@ To ensure files are extracted and assigned to the owner/group of the extracting 
 
 ### On macOS (BSD tar)
 
+⚠ BSD tar doesn't support a `--delete` option. Thus, hidden files (dot files) can't be removed (excluded) from tarballs.
+Removing discovered hidden files afterward from created tarballs is used on runner OS providing GNU tar. This technique
+can't be applied to BSD tar.
+
 ⚠ BSD tar doesn't support a `--verbatim-files-from` option. Thus, files starting with a dash might be interpreted by `tar`
 as a command line option.
 
