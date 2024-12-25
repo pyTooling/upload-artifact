@@ -131,9 +131,11 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
-        printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
-        shopt
-        printf "::endgroup::\n"
+        if [[ "${{ inputs.debug }}" == "true" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
+          shopt
+          printf "::endgroup::\n"
+        fi
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
           printf "%s" "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
@@ -187,6 +189,12 @@ runs:
           done | sort | uniq
         }
 
+        printf "::group::${ANSI_LIGHT_BLUE}List all pattern for 'tar' ...${ANSI_NOCOLOR}\n"
+        while IFS=$'\r\n' read -r pattern; do
+          printf "  %s\n" "${pattern}"
+        done <<<$(print_files_unique "${PATTERNS[@]}")
+        printf "::endgroup::\n"
+
         printf "%s\n" "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
         printf "%s" "Assemble OS specific tar command line options ... "
         if [[ "${{ runner.os }}" == "macOS" ]]; then
@@ -219,10 +227,11 @@ runs:
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-        dirCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
+        dirCount=$(tar  -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep    -E '/$' | wc -l)
         fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
-        printf "%s\n" "${ANSI_CYAN}Directories: ${dirCount}    Files: ${fileCount}${ANSI_NOCOLOR}"
-        printf "%s\n" "${ANSI_CYAN}Files collected: $fileCount${ANSI_NOCOLOR}"
+        printf "%s\n" "${ANSI_CYAN}Collected items:${ANSI_NOCOLOR}"
+        printf "  %s\n" "${ANSI_CYAN}Directories: ${dirCount}${ANSI_NOCOLOR}"
+        printf "  %s\n" "${ANSI_CYAN}Files:       ${fileCount}${ANSI_NOCOLOR}"
 
     - name: List content of the generated tarball
       id: debug
