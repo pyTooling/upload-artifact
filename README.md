@@ -3,21 +3,30 @@
 This composite action, based on [`actions/upload-artifact`](https://github.com/actions/upload-artifact) and packaging
 the artifact's content in a tarball, will preserve file attributes like **file permissions**. This essential capability
 is not implemented by GitHub until now (requested on [05.12.2019](https://github.com/actions/upload-artifact/issues/38))
-and still delayed and/or refused? to be implemented in the future. According to GitHub, the internal API doesn't allow
-the implementation of such a feature, but this actions is demonstrating a working solution.
+and still delayed and/or rejected(?) to be implemented in the future. According to GitHub, the internal API doesn't
+allow  the implementation of such a feature, but this actions is demonstrating a working solution.
 
-See [pyTooling/download-artifact](https://github.com/pyTooling/download-artifact) for the matching download action.
+📥 See [pyTooling/download-artifact](https://github.com/pyTooling/download-artifact) for the matching download action.
+
+
+## Additional Features compared to `actions/upload-artifact`
+
+* Select an operation mode of `tar` or `legacy`. The latter will collect the files in an artifact without a tarball.
+* Enabled debug mode, to list all gathered files in an artifact.
+* Override the tarballs name in case of naming collisions.
+
 
 ## Advantages Compared to Competing GitHub Actions
 
 * Support all parameters of `actions/upload-artifact`.  
 	(Others support only a subset.)
 * Supports Ubuntu, Windows and macOS GitHub Runner images.  
-	(Others are created for Linux only.)
+	(Others are created for Linux in mind.)
 * Well-defined behavior of tarball internal directory/file structure.  
 	(No silent and "unpredictable" removal of common prefixes.)
 * Store files in tarball without owner and group information.
-* Testcases implemented as a pipeline verifying uploads/downloads using a tarball.
+* Testcases are implemented as a pipeline, verifying uploads/downloads using a tarball.
+
 
 ## Usage
 
@@ -46,17 +55,19 @@ jobs:
 
 ### Input Parameters
 
-| Parameter              | Required | Default             | Description                                                                                                                                                                                                                                                                          |
-|------------------------|:--------:|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`                 |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                      |
-| `working-directory`    |    no    | `''`                |                                                                                                                                                                                                                                                                                      |
-| `path`                 |   yes    |                     | A list of files, directories or wildcard patterns that describes what to upload.                                                                                                                                                                                                     |
-| `if-no-files-found`    |    no    | `'warn'`            | The desired behavior if no files are found using the provided path. <br/> Available Options:<br/>  warn: Output a warning but do not fail the action<br/>  error: Fail the action with an error message<br/>  ignore: Do not output any warnings or errors, the action does not fail |
-| `retention-days`       |    no    | repository settings | Duration after which artifact will expire in days. 0 means using default retention. <br/> Minimum 1 day.<br/> Maximum 90 days unless changed from the repository settings page.                                                                                                      |
-| `compression-level`    |    no    | `6`                 | The level of compression for Zlib to be applied to the artifact archive.<br/> The value can range from 0 to 9.<br/> For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.                                                    |
-| `overwrite`            |    no    | `false`             | If true, an artifact with a matching name will be deleted before a new one is uploaded.<br/> If false, the action will fail if an artifact for the given name already exists.<br/> Does not fail if the artifact does not exist.                                                     |
-| `include-hidden-files` |    no    | `false`             | Whether to include hidden files in the provided path in the artifact.<br/> The file contents of any hidden files in the path should be validated before enabled this to avoid uploading sensitive information.                                                                       |
-| `tarball-name`         |    no    | [^1]                |                                                                                                                                                                                                                                                                                      |
+| Parameter              | Required | Default             | Description                                                                                                                                                                                                                                                                                 |
+|------------------------|:--------:|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`                 |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                             |
+| `working-directory`    |    no    | `''`                |                                                                                                                                                                                                                                                                                             |
+| `path`                 |   yes    |                     | A list of files, directories or wildcard patterns that describes what to upload.                                                                                                                                                                                                            |
+| `if-no-files-found`    |    no    | `'warn'`            | The desired behavior if no files are found using the provided path.<br/>Available Options:<br/> • `warn`: Output a warning but do not fail the action<br/> • `error`: Fail the action with an error message<br/> • `ignore`: Do not output any warnings or errors, the action does not fail |
+| `retention-days`       |    no    | repository settings | Duration after which artifact will expire in days. 0 means using default retention. <br/> Minimum 1 day.<br/> Maximum 90 days unless changed from the repository settings page.                                                                                                             |
+| `compression-level`    |    no    | `6`                 | The level of compression for Zlib to be applied to the artifact archive.<br/> The value can range from 0 to 9.<br/> For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.                                                           |
+| `overwrite`            |    no    | `false`             | If true, an artifact with a matching name will be deleted before a new one is uploaded.<br/> If false, the action will fail if an artifact for the given name already exists.<br/> Does not fail if the artifact does not exist.                                                            |
+| `include-hidden-files` |    no    | `false`             | Whether to include hidden files in the provided path in the artifact.<br/> The file contents of any hidden files in the path should be validated before enabled this to avoid uploading sensitive information.                                                                              |
+| `mode`                 |    no    | `'tar'`             | Mode of operation. Allowed modes:<br/> • `tar` (default),<br/> • `legacy`                                                                                                                                                                                                                   |
+| `debug`                |    no    | `false`             | Enabled debug mode. List content of the created tarball.                                                                                                                                                                                                                                    |
+| `tarball-name`         |    no    | [^1]                | Filename of the embedded tarball.                                                                                                                                                                                                                                                           |
 
 [^1]: `'__pyTooling_upload_artifact__.tar'`
 
@@ -85,7 +96,7 @@ jobs:
 
 This action uses `tar` as provided by the GitHub runner's operating system images.
 
-### On Linux (GNU tar)
+### On Linux and Windows (GNU tar)
 
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
@@ -110,15 +121,6 @@ as a command line option.
 
 To ensure files are extracted and assigned to the owner/group of the extracting user, options `--gname=root`, `--gid=0`,
 `--uname=root` and `--uid=0` are used when creating the tarball.
-
-
-### On Windows (GNU tar)
-
-To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
-`--verbatim-files-from` option.
-
-To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
-`--group=root:0` are used when creating the tarball.
 
 
 ## Dependencies

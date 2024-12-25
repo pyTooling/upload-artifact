@@ -80,38 +80,60 @@ inputs:
     type: boolean
     required: false
     default: false
+  mode:
+    description: |
+      Mode of operation. Allowed modes: tar (default), legacy
+    type: string
+    required: false
+    default: 'tar'
+  debug:
+    description: |
+      Enabled debug mode. List content of the created tarball.
+    type: boolean
+    required: false
+    default: false
   tarball-name:
+    description: |
+      Filename of the embedded tarball.
     type: string
     required: false
     default: '__pyTooling_upload_artifact__.tar'
 
 outputs:
   artifact-id:
-    description: "GitHub ID of an Artifact, can be used by the REST API"
-    value: ${{ steps.upload.outputs.artifact-id }}
+    description: |
+      GitHub ID of an Artifact, can be used by the REST API.
+    value: ${{ steps.upload.outputs.artifact-id || steps.upload-legacy.outputs.artifact-id }}
   artifact-url:
     description: |
       URL to download an Artifact. Can be used in many scenarios such as linking to
       artifacts in issues or pull requests. Users must be logged-in in order for this
       URL to work. This URL is valid as long as the artifact has not expired or the
       artifact, run or repository have not been deleted.
-    value: ${{ steps.upload.outputs.artifact-url }}
+    value: ${{ steps.upload.outputs.artifact-url || steps.upload-legacy.outputs.artifact-url}}
 
 runs:
   using: composite
   steps:
     - name: Create tarball from given file patterns
       id: prepare
+      if: inputs.mode == 'tar'
       shell: bash
       run: |
+        # Create tarball from given file patterns
         set +e
         shopt -s globstar
 
+        ANSI_CYAN=$'\x1b[36m'
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
+
+        printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
+        shopt
+        printf "::endgroup::\n"
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
           printf "%s" "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
@@ -197,12 +219,38 @@ runs:
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)
+        dirCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
+        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        printf "%s\n" "${ANSI_CYAN}Directories: ${dirCount}    Files: ${fileCount}${ANSI_NOCOLOR}"
         printf "%s\n" "${ANSI_CYAN}Files collected: $fileCount${ANSI_NOCOLOR}"
 
+    - name: List content of the generated tarball
+      id: debug
+      if: inputs.mode == 'tar' && inputs.debug == 'true'
+      shell: bash
+      run: |
+        # List content of the generated tarball
+        set +e
+
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        printf "::group::${ANSI_LIGHT_BLUE}Content of '${{ inputs.tarball-name }}':${ANSI_NOCOLOR}\n"
+        tar -tvf "${{ inputs.tarball-name }}"
+        printf "\n"
+        dirCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
+        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        printf "%s\n" "${ANSI_CYAN}Directories: ${dirCount}    Files: ${fileCount}${ANSI_NOCOLOR}"
+        printf "::endgroup::\n"
+
     # https://github.com/actions/upload-artifact
-    - name: Upload artifact
+    - name: Upload artifact (tarball)
       id: upload
+      if: inputs.mode == 'tar'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
@@ -215,12 +263,17 @@ runs:
 
     - name: Remove temporary tarball
       id: cleanup
+      if: inputs.mode == 'tar'
       shell: bash
       run: |
+        # Remove temporary tarball
         set +e
 
+        ANSI_CYAN=$'\x1b[36m'
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
         printf "%s" "Removing temporary tarball ... "
@@ -230,3 +283,16 @@ runs:
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
+
+    - name: Upload artifact (legacy)
+      id: upload-legacy
+      if: inputs.mode == 'legacy'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.path }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        retention-days: ${{ inputs.retention-days }}
+        compression-level: ${{ inputs.compression-level }}
+        overwrite: ${{ inputs.overwrite }}
+        include-hidden-files: ${{ inputs.include-hidden-files }}

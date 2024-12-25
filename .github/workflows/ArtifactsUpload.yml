@@ -38,8 +38,8 @@ jobs:
 
       - uses: ./.github/actions/create-files
 
-      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release'
-        uses: pyTooling/upload-artifact@dev
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release' with github action
+        uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-release
@@ -49,11 +49,24 @@ jobs:
             bin/*.py
             lib/
 
-      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-release'
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-release' with debug
         uses: pyTooling/upload-artifact@dev
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-pyTooling-release
+          debug: true
+          path: |
+            document1.txt
+            *.log
+            bin/*.py
+            lib/
+
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-legacy-release' with legacy
+        uses: pyTooling/upload-artifact@dev
+        continue-on-error: true
+        with:
+          name: ${{ matrix.os.name }}-legacy-release
+          mode: legacy
           path: |
             document1.txt
             *.log
@@ -298,6 +311,7 @@ jobs:
         with:
           files: |
             bin/program.py
+            # bin/tool.py
             lib/common.py
             lib/shared.py
 
