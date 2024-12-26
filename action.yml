@@ -86,9 +86,9 @@ inputs:
     type: string
     required: false
     default: 'tar'
-  debug:
+  investigate:
     description: |
-      Enabled debug mode. List content of the created tarball.
+      If enabled, list content of the created tarball.
     type: boolean
     required: false
     default: false
@@ -131,7 +131,7 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
-        if [[ "${{ inputs.debug }}" == "true" ]]; then
+        if [[ "${{ inputs.investigate }}" == "true" ]]; then
           printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
           shopt
           printf "::endgroup::\n"
@@ -276,8 +276,8 @@ runs:
         fi
 
     - name: List content of the generated tarball
-      id: debug
-      if: inputs.mode == 'tar' && inputs.debug == 'true'
+      id: investigate
+      if: inputs.mode == 'tar' && inputs.investigate == 'true'
       shell: bash
       run: |
         # List content of the generated tarball

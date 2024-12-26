@@ -78,7 +78,7 @@ runs:
           printf "%s" "Checking '${file}' ... "
           if [[ -f "$file" ]]; then
             printf "%s\n" "${ANSI_LIGHT_RED}[UNEXPECTED]${ANSI_NOCOLOR}"
-            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' is unexpected."
+            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' isn't expected."
             errors=$((errors + 1))
           else
             printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
