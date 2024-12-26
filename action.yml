@@ -80,38 +80,62 @@ inputs:
     type: boolean
     required: false
     default: false
+  mode:
+    description: |
+      Mode of operation. Allowed modes: tar (default), legacy
+    type: string
+    required: false
+    default: 'tar'
+  debug:
+    description: |
+      Enabled debug mode. List content of the created tarball.
+    type: boolean
+    required: false
+    default: false
   tarball-name:
+    description: |
+      Filename of the embedded tarball.
     type: string
     required: false
     default: '__pyTooling_upload_artifact__.tar'
 
 outputs:
   artifact-id:
-    description: "GitHub ID of an Artifact, can be used by the REST API"
-    value: ${{ steps.upload.outputs.artifact-id }}
+    description: |
+      GitHub ID of an Artifact, can be used by the REST API.
+    value: ${{ steps.upload.outputs.artifact-id || steps.upload-legacy.outputs.artifact-id }}
   artifact-url:
     description: |
       URL to download an Artifact. Can be used in many scenarios such as linking to
       artifacts in issues or pull requests. Users must be logged-in in order for this
       URL to work. This URL is valid as long as the artifact has not expired or the
       artifact, run or repository have not been deleted.
-    value: ${{ steps.upload.outputs.artifact-url }}
+    value: ${{ steps.upload.outputs.artifact-url || steps.upload-legacy.outputs.artifact-url}}
 
 runs:
   using: composite
   steps:
     - name: Create tarball from given file patterns
       id: prepare
+      if: inputs.mode == 'tar'
       shell: bash
       run: |
+        # Create tarball from given file patterns
         set +e
         shopt -s globstar
 
+        ANSI_CYAN=$'\x1b[36m'
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
+
+        if [[ "${{ inputs.debug }}" == "true" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
+          shopt
+          printf "::endgroup::\n"
+        fi
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
           printf "%s" "Changing artifact root directory to '${{ inputs.working-directory }}' ... "
@@ -133,11 +157,22 @@ runs:
             fi
           else
             printf "%s\n" "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Directory '${{ inputs.working-directory }}' doesn't exist."
             exit 1
           fi
         else
           tarDirectory=""
         fi
+
+        #if [[ "${{ inputs.include-hidden-files }}" == "true" ]]; then
+        #  printf "%s" "Enable glob for dot-files (hidden files) ... "
+        #  shopt -s dotglob
+        #  if [[ $? -ne 0 ]]; then
+        #    printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+        #  else
+        #    printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+        #  fi
+        #fi
 
         printf "%s" "Convert provided file patterns to a single line ... "
         PATTERNS=()
@@ -154,6 +189,12 @@ runs:
             compgen -G "$i" || true
           done | sort | uniq
         }
+
+        printf "::group::${ANSI_LIGHT_BLUE}List all pattern for 'tar' ...${ANSI_NOCOLOR}\n"
+        while IFS=$'\r\n' read -r pattern; do
+          printf "  %s\n" "${pattern}"
+        done <<<$(print_files_unique "${PATTERNS[@]}")
+        printf "::endgroup::\n"
 
         printf "%s\n" "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
         printf "%s" "Assemble OS specific tar command line options ... "
@@ -175,23 +216,92 @@ runs:
           filesFrom=("--verbatim-files-from" "--files-from")
         else
           printf "%s\n" "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Unsupported runner OS '${{ runner.os }}'."
           exit 1
         fi
 
         printf "%s" "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
-        tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}")
+        msg=$(tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}"))
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "tar: ${msg}"
           exit 1
         else
-          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-        echo -e "${ANSI_CYAN}Files collected: $(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | wc -l)${ANSI_NOCOLOR}"
+        dirCount=$(tar  -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep    -E '/$' | wc -l)
+        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        printf "%s\n" "${ANSI_CYAN}Collected items:${ANSI_NOCOLOR}"
+        printf "  %s\n" "${ANSI_CYAN}Directories: ${dirCount}${ANSI_NOCOLOR}"
+        printf "  %s\n" "${ANSI_CYAN}Files:       ${fileCount}${ANSI_NOCOLOR}"
+
+        if [[ $fileCount -eq 0 ]]; then
+          if [[ "${{ inputs.if-no-files-found }}" == "error" ]]; then
+            printf "::error title=%s::%s\n" "${{ github.job }} - pyTooling/upload-artifact" "No files found for given pattern."
+            exit 1
+          elif [[ "${{ inputs.if-no-files-found }}" == "warn" ]]; then
+            printf "::warning title=%s::%s\n" "${{ github.job }} - pyTooling/upload-artifact" "No files found for given pattern."
+          elif [[ "${{ inputs.if-no-files-found }}" == "ignore" ]]; then
+            printf "%s\n" "No files found for given pattern."
+          else
+            printf "%s\n" "Unknown option '${{ inputs.if-no-files-found }}'."
+          fi
+        fi
+
+    - name: Remove dot-files if not explicitly included
+      id: clean
+      if:  inputs.include-hidden-files == 'false'
+      shell: bash
+      run: |
+        # List content of the generated tarball
+        set +e
+
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        if [[ "${{ runner.os }}" != "macOS" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
+          while IFS=$'\r\n' read -r file; do
+            printf "  %s\n" "${file}"
+            tar -vf "${{ inputs.tarball-name }}" --delete "${file}"
+          done <<<$(tar -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+          printf "::endgroup::\n"
+        else
+          printf "::warning title=%s::%s\n" "pyTooling/upload-artifact" "macOS doesn't support removing hidden files."
+        fi
+
+    - name: List content of the generated tarball
+      id: debug
+      if: inputs.mode == 'tar' && inputs.debug == 'true'
+      shell: bash
+      run: |
+        # List content of the generated tarball
+        set +e
+
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        printf "::group::${ANSI_LIGHT_BLUE}Content of '${{ inputs.tarball-name }}':${ANSI_NOCOLOR}\n"
+        tar -tvf "${{ inputs.tarball-name }}"
+        printf "\n"
+        dirCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
+        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        printf "%s\n" "${ANSI_CYAN}Directories: ${dirCount}    Files: ${fileCount}${ANSI_NOCOLOR}"
+        printf "::endgroup::\n"
 
     # https://github.com/actions/upload-artifact
-    - name: Upload artifact
+    - name: Upload artifact (tarball)
       id: upload
+      if: inputs.mode == 'tar'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
@@ -200,22 +310,41 @@ runs:
         retention-days: ${{ inputs.retention-days }}
         compression-level: ${{ inputs.compression-level }}
         overwrite: ${{ inputs.overwrite }}
-        include-hidden-files: ${{ inputs.include-hidden-files }}
+#        include-hidden-files:
 
     - name: Remove temporary tarball
       id: cleanup
+      if: inputs.mode == 'tar'
       shell: bash
       run: |
+        # Remove temporary tarball
         set +e
 
+        ANSI_CYAN=$'\x1b[36m'
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
         printf "%s" "Removing temporary tarball ... "
         rm -f "${{ inputs.tarball-name }}"
         if [[ $? -ne 0 ]]; then
-          echo -e "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
+          printf "::warning title=%s::%s\n" "pyTooling/upload-artifact" "Can't remove tarball '${{ inputs.tarball-name }}'."
         else
-          echo -e "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
+          printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
+
+    - name: Upload artifact (legacy)
+      id: upload-legacy
+      if: inputs.mode == 'legacy'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.path }}
+        if-no-files-found: ${{ inputs.if-no-files-found }}
+        retention-days: ${{ inputs.retention-days }}
+        compression-level: ${{ inputs.compression-level }}
+        overwrite: ${{ inputs.overwrite }}
+        include-hidden-files: ${{ inputs.include-hidden-files }}

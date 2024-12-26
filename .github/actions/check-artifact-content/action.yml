@@ -1,0 +1,70 @@
+# The MIT License (MIT)
+#
+# Copyright © 2024 The pyTooling Authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+# documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+# persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+# Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+name: Check-Artifact-Content
+description: Check what was contained in artifact.
+inputs:
+  must-exist:
+    description: True, if the tarball must exist, otherwise false.
+    type: boolean
+    default: false
+  tarball:
+    description: Name of the expected tarball.
+    type: string
+    default: '__pyTooling_upload_artifact__.tar'
+
+runs:
+  using: composite
+  steps:
+    - name: 🔎 Inspect downloaded artifact content
+      shell: bash
+      run: |
+        # 🔎 Inspect downloaded artifact content
+        set +e
+
+        ANSI_CYAN=$'\x1b[36m'
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_LIGHT_YELLOW=$'\x1b[93m'
+        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        printf "::group::${ANSI_LIGHT_BLUE}List directory content ...${ANSI_NOCOLOR}\n"
+        if [[ "${{ runner.os }}" != "macOS" ]]; then
+          tree -pashC -I .git .
+        else
+          ls -lAh .
+        fi
+        printf "::endgroup::\n"
+
+        printf "%s" "Does tarball '${{ inputs.tarball }}' exist ... "
+        if [[ -f ${{ inputs.tarball }} ]]; then
+          if [[ "${{ inputs.must-exist }}" == "true" ]]; then
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[YES]${ANSI_NOCOLOR}"
+          else
+            printf "%s\n" "${ANSI_LIGHT_RED}[YES]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-artifact-content" "Tarball '${{ inputs.tarball }}' wasn't removed."
+            exit 1
+          fi
+        else
+          if [[ "${{ inputs.must-exist }}" == "true" ]]; then
+            printf "%s\n" "${ANSI_LIGHT_RED}[NO]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-artifact-content" "Tarball '${{ inputs.tarball }}' is missing."
+            exit 1
+          else
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[NO]${ANSI_NOCOLOR}"
+          fi
+        fi
