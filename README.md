@@ -60,19 +60,18 @@ jobs:
 | `name`                     |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                             |
 | `working-directory`        |    no    | `''`                |                                                                                                                                                                                                                                                                                             |
 | `path`                     |   yes    |                     | A list of files, directories or wildcard patterns that describes what to upload.                                                                                                                                                                                                            |
-| `if-no-files-found`[^3]    |    no    | `'warn'`            | The desired behavior if no files are found using the provided path.<br/>Available Options:<br/> • `warn`: Output a warning but do not fail the action<br/> • `error`: Fail the action with an error message<br/> • `ignore`: Do not output any warnings or errors, the action does not fail |
+| `if-no-files-found`        |    no    | `'warn'`            | The desired behavior if no files are found using the provided path.<br/>Available Options:<br/> • `warn`: Output a warning but do not fail the action<br/> • `error`: Fail the action with an error message<br/> • `ignore`: Do not output any warnings or errors, the action does not fail |
 | `retention-days`           |    no    | repository settings | Duration after which artifact will expire in days. 0 means using default retention. <br/> Minimum 1 day.<br/> Maximum 90 days unless changed from the repository settings page.                                                                                                             |
 | `compression-level`        |    no    | `6`                 | The level of compression for Zlib to be applied to the artifact archive.<br/> The value can range from 0 to 9.<br/> For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.                                                           |
 | `overwrite`                |    no    | `false`             | If true, an artifact with a matching name will be deleted before a new one is uploaded.<br/> If false, the action will fail if an artifact for the given name already exists.<br/> Does not fail if the artifact does not exist.                                                            |
 | `include-hidden-files`[^2] |    no    | `false`             | Whether to include hidden files in the provided path in the artifact.<br/> The file contents of any hidden files in the path should be validated before enabled this to avoid uploading sensitive information.                                                                              |
-| `mode`[^4]                 |    no    | `'tar'`             | Mode of operation. Allowed modes:<br/> • `tar` (default),<br/> • `legacy`                                                                                                                                                                                                                   |
+| `mode`[^3]                 |    no    | `'tar'`             | Mode of operation. Allowed modes:<br/> • `tar` (default),<br/> • `legacy`                                                                                                                                                                                                                   |
 | `debug`                    |    no    | `false`             | Enabled debug mode. List content of the created tarball.                                                                                                                                                                                                                                    |
 | `tarball-name`             |    no    | [^1]                | Filename of the embedded tarball.                                                                                                                                                                                                                                                           |
 
 [^1]: `'__pyTooling_upload_artifact__.tar'`
 [^2]: [Hidden files are included, when directories are uploaded bug](https://github.com/pyTooling/upload-artifact/issues/20)
-[^3]: [Parameter 'if-no-files-found' has no effect bug](https://github.com/pyTooling/upload-artifact/issues/21)
-[^4]: [Add a legacy mode](https://github.com/pyTooling/upload-artifact/issues/22)
+[^3]: [Add a legacy mode](https://github.com/pyTooling/upload-artifact/issues/22)
 
 ### Output Parameters
 
@@ -111,7 +110,7 @@ To ensure files are extracted and assigned to the owner/group of the extracting 
 
 ⚠ BSD tar doesn't support a `--delete` option. Thus, hidden files (dot files) can't be removed (excluded) from tarballs.
 Removing discovered hidden files afterward from created tarballs is used on runner OS providing GNU tar. This technique
-can't be applied to BSD tar.
+can't be applied to BSD tar. [^2]
 
 ⚠ BSD tar doesn't support a `--verbatim-files-from` option. Thus, files starting with a dash might be interpreted by `tar`
 as a command line option.
