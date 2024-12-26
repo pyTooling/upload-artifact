@@ -15,18 +15,22 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 name: Check-Directory-Content
-description: Check if directory contains the listed files.
+description: Check if directory contains all expected and no unexpected files.
 inputs:
-  files:
+  expected-files:
+    description: List of filenames.
+    type: string
+  unexpected-files:
     description: List of filenames.
     type: string
 
 runs:
   using: composite
   steps:
-    - name: 📋 Verify extracted tarball content
+    - name: 📋 Verify extracted tarball content for expected files
       shell: bash
       run: |
+        # 📋 Verify extracted tarball content for expected files
         set +e
 
         ANSI_LIGHT_RED=$'\x1b[91m'
@@ -42,11 +46,44 @@ runs:
           if [[ -f "$file" ]]; then
             printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
           else
-            printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-            printf "%s\n" "${ANSI_LIGHT_RED}Extracted artifact doesn't contain file '${file}'.${ANSI_NOCOLOR}"
+            printf "%s\n" "${ANSI_LIGHT_RED}[MISSING]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' is missing."
             errors=$((errors + 1))
           fi
-        done <<<'${{ inputs.files }}'
+        done <<<'${{ inputs.expected-files }}'
+
+        printf "%s\n" ""
+        if [[ $errors -ne 0 ]]; then
+          printf "%s\n" "${ANSI_LIGHT_RED}Counted ${errors} errors.${ANSI_NOCOLOR}"
+          exit 1
+        else
+          printf "%s\n" "${ANSI_LIGHT_GREEN}No errors found.${ANSI_NOCOLOR}"
+        fi
+
+    - name: 📋 Verify extracted tarball content for unexpected files
+      shell: bash
+      run: |
+        # 📋 Verify extracted tarball content for unexpected files
+        set +e
+
+        ANSI_LIGHT_RED=$'\x1b[91m'
+        ANSI_LIGHT_GREEN=$'\x1b[92m'
+        ANSI_NOCOLOR=$'\x1b[0m'
+
+        errors=0
+        while IFS=$'\r\n' read -r file; do
+          # skip empty or comment lines
+          [[ "${file}" == "" || "${file:0:1}" == "#" ]] && continue
+
+          printf "%s" "Checking '${file}' ... "
+          if [[ -f "$file" ]]; then
+            printf "%s\n" "${ANSI_LIGHT_RED}[UNEXPECTED]${ANSI_NOCOLOR}"
+            printf "::error title=%s::%s\n" "check-directory-content" "File '${file}' is unexpected."
+            errors=$((errors + 1))
+          else
+            printf "%s\n" "${ANSI_LIGHT_GREEN}[PASSED]${ANSI_NOCOLOR}"
+          fi
+        done <<<'${{ inputs.unexpected-files }}'
 
         printf "%s\n" ""
         if [[ $errors -ne 0 ]]; then
