@@ -52,12 +52,12 @@ jobs:
             bin/*.py
             lib/
 
-      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-release' with debug
+      - name: 📤 Upload artifact '${{ matrix.os.name }}-pyTooling-release' with investigate
         uses: pyTooling/upload-artifact@main
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-pyTooling-release
-          debug: true
+          investigate: true
           path: |
             document1.txt
             *.log
