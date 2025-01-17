@@ -14,7 +14,7 @@
 # WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-name: Upload Artifact (Preserve File Permissions)
+name: 📤 Upload Artifact (Preserve File Permissions)
 branding:
   icon: upload
   color: yellow
@@ -153,7 +153,7 @@ runs:
                 tarDirectory="../${tarDirectory}"
                 dir=$(dirname -- "${dir}")
               done
-              printf "%s\n" "  tarDirectory: ${tarDirectory}"
+              printf "  %s\n" "tarDirectory: ${tarDirectory}"
             fi
           else
             printf "%s\n" "echo ${ANSI_LIGHT_RED}[NO DIRECTORY]${ANSI_NOCOLOR}"
@@ -299,10 +299,10 @@ runs:
         printf "::endgroup::\n"
 
     # https://github.com/actions/upload-artifact
-    - name: Upload artifact (tarball)
+    - name: 📤 Upload artifact (tarball)
+      uses: actions/upload-artifact@v4
       id: upload
       if: inputs.mode == 'tar'
-      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
         path: ${{ inputs.tarball-name }}
@@ -336,10 +336,10 @@ runs:
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-    - name: Upload artifact (legacy)
+    - name: 📤 Upload artifact (legacy)
+      uses: actions/upload-artifact@v4
       id: upload-legacy
       if: inputs.mode == 'legacy'
-      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
         path: ${{ inputs.path }}
