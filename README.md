@@ -1,3 +1,6 @@
+[![GitHub Workflow - Build and Test Status](https://img.shields.io/github/actions/workflow/status/pyTooling/upload-artifact/.github%2Fworkflows%2FArtifactsUpload.yml?branch=dev&logo=githubactions)](https://GitHub.com/pyTooling/upload-artifact/actions/workflows/ArtifactsUpload.yml)
+[![Sourcecode License](https://img.shields.io/badge/code-MIT%20License-green?longCache=true&style=flat-square&logoColor=fff)](LICENSE.md)
+
 # Artifact Upload Action with File Permission Preservation
 
 This composite action, based on [`actions/upload-artifact`](https://github.com/actions/upload-artifact) and packaging
