@@ -131,10 +131,21 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
+        if ! [[ "${{ runner.os }}" == "macOS" || "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Unsupported runner OS '${{ runner.os }}'."
+          exit 1
+        fi
+
         if [[ "${{ inputs.investigate }}" == "true" ]]; then
-          printf "::group::${ANSI_LIGHT_BLUE}List all shell options via 'shopt' ...${ANSI_NOCOLOR}\n"
+          printf "::group::${ANSI_LIGHT_BLUE}%s${ANSI_NOCOLOR}\n" "List all shell options via 'shopt' ..."
           shopt
           printf "::endgroup::\n"
+        fi
+
+        if [[ "${{ runner.os }}" == "macOS" ]]; then
+          tarProg="gtar"
+        else
+          tarProg="tar"
         fi
 
         if [[ "${{ inputs.working-directory }}" != "" ]]; then
@@ -190,48 +201,32 @@ runs:
           done | sort | uniq
         }
 
-        printf "::group::${ANSI_LIGHT_BLUE}List all pattern for 'tar' ...${ANSI_NOCOLOR}\n"
+        printf "::group::${ANSI_LIGHT_BLUE}List all pattern for '${tarProg}' ...${ANSI_NOCOLOR}\n"
         while IFS=$'\r\n' read -r pattern; do
           printf "  %s\n" "${pattern}"
         done <<<$(print_files_unique "${PATTERNS[@]}")
         printf "::endgroup::\n"
 
-        printf "%s\n" "Checking tar ($(which tar)): ${ANSI_CYAN}$(tar --version | head -n 1)${ANSI_NOCOLOR}"
-        printf "%s" "Assemble OS specific tar command line options ... "
-        if [[ "${{ runner.os }}" == "macOS" ]]; then
-          printf "%s\n" "${ANSI_LIGHT_YELLOW}[macOS]${ANSI_NOCOLOR}"
+        printf "%s\n" "Checking ${tarProg} ($(which ${tarProg})): ${ANSI_CYAN}$(${tarProg} --version | head -n 1)${ANSI_NOCOLOR}"
+        printf "%s\n" "Assemble OS specific tar command line options ... ${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
 
-          # Options for BSD tar
-          tarOptions=("--gname=root" "--gid=0" "--uname=root" "--uid=0")
-
-          # Option to read filenames from file
-          filesFrom=("-T")
-        elif [[ "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
-          printf "%s\n" "${ANSI_LIGHT_GREEN}[${{ runner.os }}]${ANSI_NOCOLOR}"
-
-          # Options for GNU tar
-          tarOptions=("--owner=root:0" "--group=root:0")
-
-          # Option to read filenames from file
-          filesFrom=("--verbatim-files-from" "--files-from")
-        else
-          printf "%s\n" "${ANSI_LIGHT_RED}[UNSUPPORTED]${ANSI_NOCOLOR}"
-          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "Unsupported runner OS '${{ runner.os }}'."
-          exit 1
-        fi
+        # Options for GNU tar
+        tarOptions=("--owner=root:0" "--group=root:0")
+        # Option to read filenames from file
+        filesFrom=("--verbatim-files-from" "--files-from")
 
         printf "%s" "Creating temporary tarball '${tarDirectory}${{ inputs.tarball-name }}' ... "
-        msg=$(tar -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}"))
+        msg=$(${tarProg} -cf "${tarDirectory}${{ inputs.tarball-name }}" "${tarOptions[@]}" "${filesFrom[@]}" <(print_files_unique "${PATTERNS[@]}"))
         if [[ $? -ne 0 ]]; then
           printf "%s\n" "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}"
-          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "tar: ${msg}"
+          printf "::error title=%s::%s\n" "pyTooling/upload-artifact" "${tarProg}: ${msg}"
           exit 1
         else
           printf "%s\n" "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}"
         fi
 
-        dirCount=$(tar  -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep    -E '/$' | wc -l)
-        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        dirCount=$(${tarProg}  -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep    -E '/$' | wc -l)
+        fileCount=$(${tarProg} -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
         printf "%s\n" "${ANSI_CYAN}Collected items:${ANSI_NOCOLOR}"
         printf "  %s\n" "${ANSI_CYAN}Directories: ${dirCount}${ANSI_NOCOLOR}"
         printf "  %s\n" "${ANSI_CYAN}Files:       ${fileCount}${ANSI_NOCOLOR}"
@@ -264,16 +259,18 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
-        if [[ "${{ runner.os }}" != "macOS" ]]; then
-          printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
-          while IFS=$'\r\n' read -r file; do
-            printf "  %s\n" "${file}"
-            tar -vf "${{ inputs.tarball-name }}" --delete "${file}"
-          done <<<$(tar -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
-          printf "::endgroup::\n"
+        if [[ "${{ runner.os }}" == "macOS" ]]; then
+          tarProg="gtar"
         else
-          printf "::warning title=%s::%s\n" "pyTooling/upload-artifact" "macOS doesn't support removing hidden files."
+          tarProg="tar"
         fi
+
+        printf "::group::${ANSI_LIGHT_BLUE}Removing unwanted files from '${{ inputs.tarball-name }}' ...:${ANSI_NOCOLOR}\n"
+        while IFS=$'\r\n' read -r file; do
+          printf "  %s\n" "${file}"
+          ${tarProg} -vf "${{ inputs.tarball-name }}" --delete "${file}"
+        done <<<$(${tarProg} -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+        printf "::endgroup::\n"
 
     - name: List content of the generated tarball
       id: investigate
@@ -290,11 +287,17 @@ runs:
         ANSI_LIGHT_BLUE="\e[94m"
         ANSI_NOCOLOR=$'\x1b[0m'
 
+        if [[ "${{ runner.os }}" == "macOS" ]]; then
+          tarProg="gtar"
+        else
+          tarProg="tar"
+        fi
+
         printf "::group::${ANSI_LIGHT_BLUE}Content of '${{ inputs.tarball-name }}':${ANSI_NOCOLOR}\n"
-        tar -tvf "${{ inputs.tarball-name }}"
+        ${tarProg} -tvf "${{ inputs.tarball-name }}"
         printf "\n"
-        dirCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
-        fileCount=$(tar -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
+        dirCount=$(${tarProg} -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -E '/$' | wc -l)
+        fileCount=$(${tarProg} -tf "${tarDirectory}${{ inputs.tarball-name }}" | grep -v -E '/$' | wc -l)
         printf "%s\n" "${ANSI_CYAN}Directories: ${dirCount}    Files: ${fileCount}${ANSI_NOCOLOR}"
         printf "::endgroup::\n"
 
