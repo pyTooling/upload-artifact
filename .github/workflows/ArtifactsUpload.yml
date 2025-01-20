@@ -28,9 +28,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -92,9 +92,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -127,9 +127,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -162,9 +162,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -199,9 +199,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -238,9 +238,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -275,9 +275,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -310,9 +310,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -348,9 +348,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -387,9 +387,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
     defaults:
       run:
         shell: bash
@@ -426,9 +426,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -469,9 +469,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
-          - {'icon': '🍏', 'name': 'macOS',   'image': 'macos-14'    }
-          - {'icon': '🪟', 'name': 'Windows', 'image': 'windows-2022'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+
     defaults:
       run:
         shell: bash
@@ -543,10 +544,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -597,10 +598,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -653,10 +654,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -709,10 +710,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -769,10 +770,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -821,10 +822,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -877,10 +878,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -943,10 +944,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'inspect', 'artifact': 'github', 'action': 'actions/upload-artifact'}
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
@@ -1003,9 +1004,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {'icon': '🐧', 'name': 'Ubuntu',  'image': 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
         task:
-          - {'name': 'verify' , 'artifact': 'pyTooling', 'action': 'pyTooling/upload-artifact'}
+          - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
       run:
         shell: bash
