@@ -84,7 +84,7 @@ jobs:
 
 ## Fixed behavior compared to `actions/upload-artifact`
 
-1. **Do preserve file permissions**  
+1. **Preserve file permissions**  
    The artifact's content is collected in a tarball, which allows preserving file attributes like file permissions.
 2. **Don't remove common prefix from files**  
    `actions/upload-artifact` removes the common prefix from all files before storing in an artifact. This is not a
@@ -92,6 +92,12 @@ jobs:
    of the artifact.  
    This action defines a root directory from where the content of the tarball is constructed. This is independent of the
    list of provided file patterns.
+
+## Further Features
+
+* Files can be uploaded as a legacy artifact using `actions/upload-artifact`.  
+  `pyTooling/download-artifact` accepts artifacts from `actions/upload-artifact`, `pyTooling/upload-artifact` *tar* mode
+  and `pyTooling/upload-artifact` *legacy* mode.
 
 
 ## Limitations of `tar`
