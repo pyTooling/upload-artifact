@@ -1,3 +1,6 @@
+[![GitHub Workflow - Build and Test Status](https://img.shields.io/github/actions/workflow/status/pyTooling/upload-artifact/.github%2Fworkflows%2FArtifactsUpload.yml?branch=dev&logo=githubactions)](https://GitHub.com/pyTooling/upload-artifact/actions/workflows/ArtifactsUpload.yml)
+[![Sourcecode License](https://img.shields.io/badge/code-MIT%20License-green?longCache=true&style=flat-square&logoColor=fff)](LICENSE.md)
+
 # Artifact Upload Action with File Permission Preservation
 
 This composite action, based on [`actions/upload-artifact`](https://github.com/actions/upload-artifact) and packaging
@@ -95,9 +98,9 @@ jobs:
 
 ## Limitations of `tar`
 
-This action uses `tar` as provided by the GitHub runner's operating system images.
+This composite action uses `tar`/`gtar` (GNU tar) as provided by the GitHub runner's operating system images.
 
-### On Linux and Windows (GNU tar)
+### On Linux, macOS and Windows (GNU tar)
 
 To ensure files starting with a dash aren't considered command line options to `tar`, `tar` is called with
 `--verbatim-files-from` option.
@@ -105,9 +108,17 @@ To ensure files starting with a dash aren't considered command line options to `
 To ensure files are extracted and assigned to the owner/group of the extracting user, options `--owner=root:0` and
 `--group=root:0` are used when creating the tarball.
 
+In case, parameter `include-hidden-files` isn't set, hidden files (dot-files) are removed from the tarball in a further
+cleanup step using the `--delete` command. This step is needed to ensure compatibility with the original
+`actions/upload-artifact` action provided by GitHub.
 
-### On macOS (BSD tar)
+### Alternative BSD tar on macOS
 
+BSD tar has even worse limitations than GNU tar and offers fewer features. Thus, this composite action uses GNU tar on
+macOS, too. Fortunately, GNU tar (`gtar`) is already preinstalled via homebrew on all macOS runner images provided by
+GitHub. For more details on BSD tar expand the following collapsible section.
+
+<details><summary>Unused BSD tar on macOS </summary>
 ⚠ BSD tar doesn't support a `--delete` option. Thus, hidden files (dot files) can't be removed (excluded) from tarballs.
 Removing discovered hidden files afterward from created tarballs is used on runner OS providing GNU tar. This technique
 can't be applied to BSD tar. [^2]
@@ -126,7 +137,7 @@ as a command line option.
 
 To ensure files are extracted and assigned to the owner/group of the extracting user, options `--gname=root`, `--gid=0`,
 `--uname=root` and `--uid=0` are used when creating the tarball.
-
+</details>
 
 ## Dependencies
 
