@@ -249,7 +249,7 @@ runs:
       if:  inputs.include-hidden-files == 'false'
       shell: bash
       run: |
-        # List content of the generated tarball
+        # Remove dot-files if not explicitly included
         set +e
 
         ANSI_CYAN=$'\x1b[36m'
