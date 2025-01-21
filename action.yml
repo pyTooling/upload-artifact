@@ -143,10 +143,6 @@ runs:
         fi
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
-          printf "::group::${ANSI_LIGHT_BLUE}%s${ANSI_NOCOLOR}\n" "Install newer 'bash' via homebrew ..."
-          brew install bash
-          printf "::endgroup::\n"
-
           tarProg="gtar"
         else
           tarProg="tar"
@@ -273,7 +269,7 @@ runs:
         while IFS=$'\r\n' read -r file; do
           printf "  %s\n" "${file}"
           ${tarProg} -vf "${{ inputs.tarball-name }}" --delete "${file}"
-        done <<<$(${tarProg} -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+        done < <(${tarProg} -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
         printf "::endgroup::\n"
 
     - name: List content of the generated tarball
