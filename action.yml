@@ -143,6 +143,10 @@ runs:
         fi
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}%s${ANSI_NOCOLOR}\n" "Install newer 'bash' via homebrew ..."
+          brew install bash
+          printf "::endgroup::\n"
+
           tarProg="gtar"
         else
           tarProg="tar"
@@ -249,7 +253,7 @@ runs:
       if:  inputs.include-hidden-files == 'false'
       shell: bash
       run: |
-        # List content of the generated tarball
+        # Remove dot-files if not explicitly included
         set +e
 
         ANSI_CYAN=$'\x1b[36m'
