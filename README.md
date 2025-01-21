@@ -58,23 +58,21 @@ jobs:
 
 ### Input Parameters
 
-| Parameter                  | Required | Default             | Description                                                                                                                                                                                                                                                                                 |
-|----------------------------|:--------:|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`                     |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                             |
-| `working-directory`        |    no    | `''`                |                                                                                                                                                                                                                                                                                             |
-| `path`                     |   yes    |                     | A list of files, directories or wildcard patterns that describes what to upload.                                                                                                                                                                                                            |
-| `if-no-files-found`        |    no    | `'warn'`            | The desired behavior if no files are found using the provided path.<br/>Available Options:<br/> • `warn`: Output a warning but do not fail the action<br/> • `error`: Fail the action with an error message<br/> • `ignore`: Do not output any warnings or errors, the action does not fail |
-| `retention-days`           |    no    | repository settings | Duration after which artifact will expire in days. 0 means using default retention. <br/> Minimum 1 day.<br/> Maximum 90 days unless changed from the repository settings page.                                                                                                             |
-| `compression-level`        |    no    | `6`                 | The level of compression for Zlib to be applied to the artifact archive.<br/> The value can range from 0 to 9.<br/> For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.                                                           |
-| `overwrite`                |    no    | `false`             | If true, an artifact with a matching name will be deleted before a new one is uploaded.<br/> If false, the action will fail if an artifact for the given name already exists.<br/> Does not fail if the artifact does not exist.                                                            |
-| `include-hidden-files`[^2] |    no    | `false`             | Whether to include hidden files in the provided path in the artifact.<br/> The file contents of any hidden files in the path should be validated before enabled this to avoid uploading sensitive information.                                                                              |
-| `mode`[^3]                 |    no    | `'tar'`             | Mode of operation. Allowed modes:<br/> • `tar` (default),<br/> • `legacy`                                                                                                                                                                                                                   |
-| `investigate`              |    no    | `false`             | If enabled, list content of the created tarball.                                                                                                                                                                                                                                            |
-| `tarball-name`             |    no    | [^1]                | Filename of the embedded tarball.                                                                                                                                                                                                                                                           |
+| Parameter              | Required | Default             | Description                                                                                                                                                                                                                                                                                 |
+|------------------------|:--------:|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`                 |    no    | `'artifact'`        | Name of the artifact to upload.                                                                                                                                                                                                                                                             |
+| `working-directory`    |    no    | `''`                |                                                                                                                                                                                                                                                                                             |
+| `path`                 |   yes    |                     | A list of files, directories or wildcard patterns that describes what to upload.                                                                                                                                                                                                            |
+| `if-no-files-found`    |    no    | `'warn'`            | The desired behavior if no files are found using the provided path.<br/>Available Options:<br/> • `warn`: Output a warning but do not fail the action<br/> • `error`: Fail the action with an error message<br/> • `ignore`: Do not output any warnings or errors, the action does not fail |
+| `retention-days`       |    no    | repository settings | Duration after which artifact will expire in days. 0 means using default retention. <br/> Minimum 1 day.<br/> Maximum 90 days unless changed from the repository settings page.                                                                                                             |
+| `compression-level`    |    no    | `6`                 | The level of compression for Zlib to be applied to the artifact archive.<br/> The value can range from 0 to 9.<br/> For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.                                                           |
+| `overwrite`            |    no    | `false`             | If true, an artifact with a matching name will be deleted before a new one is uploaded.<br/> If false, the action will fail if an artifact for the given name already exists.<br/> Does not fail if the artifact does not exist.                                                            |
+| `include-hidden-files` |    no    | `false`             | Whether to include hidden files in the provided path in the artifact.<br/> The file contents of any hidden files in the path should be validated before enabled this to avoid uploading sensitive information.                                                                              |
+| `mode`                 |    no    | `'tar'`             | Mode of operation. Allowed modes:<br/> • `tar` (default),<br/> • `legacy`                                                                                                                                                                                                                   |
+| `investigate`          |    no    | `false`             | If enabled, list content of the created tarball.                                                                                                                                                                                                                                            |
+| `tarball-name`         |    no    | [^1]                | Filename of the embedded tarball.                                                                                                                                                                                                                                                           |
 
 [^1]: `'__pyTooling_upload_artifact__.tar'`
-[^2]: [Hidden files are included, when directories are uploaded bug](https://github.com/pyTooling/upload-artifact/issues/20)
-[^3]: [Add a legacy mode](https://github.com/pyTooling/upload-artifact/issues/22)
 
 ### Output Parameters
 
@@ -86,7 +84,7 @@ jobs:
 
 ## Fixed behavior compared to `actions/upload-artifact`
 
-1. **Do preserve file permissions**  
+1. **Preserve file permissions**  
    The artifact's content is collected in a tarball, which allows preserving file attributes like file permissions.
 2. **Don't remove common prefix from files**  
    `actions/upload-artifact` removes the common prefix from all files before storing in an artifact. This is not a
@@ -94,6 +92,12 @@ jobs:
    of the artifact.  
    This action defines a root directory from where the content of the tarball is constructed. This is independent of the
    list of provided file patterns.
+
+## Further Features
+
+* Files can be uploaded as a legacy artifact using `actions/upload-artifact`.  
+  `pyTooling/download-artifact` accepts artifacts from `actions/upload-artifact`, `pyTooling/upload-artifact` *tar* mode
+  and `pyTooling/upload-artifact` *legacy* mode.
 
 
 ## Limitations of `tar`
