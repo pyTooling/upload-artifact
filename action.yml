@@ -143,6 +143,10 @@ runs:
         fi
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
+          printf "::group::${ANSI_LIGHT_BLUE}%s${ANSI_NOCOLOR}\n" "Install newer 'bash' via homebrew ..."
+          brew install bash
+          printf "::endgroup::\n"
+
           tarProg="gtar"
         else
           tarProg="tar"
