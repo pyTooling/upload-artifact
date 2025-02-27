@@ -39,7 +39,7 @@ runs:
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_LIGHT_BLUE=$'\x1b[94m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
         printf "::group::${ANSI_LIGHT_BLUE}List directory content ...${ANSI_NOCOLOR}\n"
