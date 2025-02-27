@@ -128,7 +128,7 @@ runs:
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_LIGHT_BLUE=$'\x1b[94m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
         if ! [[ "${{ runner.os }}" == "macOS" || "${{ runner.os }}" == "Linux" || "${{ runner.os }}" == "Windows" ]]; then
@@ -143,10 +143,6 @@ runs:
         fi
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
-          printf "::group::${ANSI_LIGHT_BLUE}%s${ANSI_NOCOLOR}\n" "Install newer 'bash' via homebrew ..."
-          brew install bash
-          printf "::endgroup::\n"
-
           tarProg="gtar"
         else
           tarProg="tar"
@@ -208,7 +204,7 @@ runs:
         printf "::group::${ANSI_LIGHT_BLUE}List all pattern for '${tarProg}' ...${ANSI_NOCOLOR}\n"
         while IFS=$'\r\n' read -r pattern; do
           printf "  %s\n" "${pattern}"
-        done <<<$(print_files_unique "${PATTERNS[@]}")
+        done < <(print_files_unique "${PATTERNS[@]}")
         printf "::endgroup::\n"
 
         printf "%s\n" "Checking ${tarProg} ($(which ${tarProg})): ${ANSI_CYAN}$(${tarProg} --version | head -n 1)${ANSI_NOCOLOR}"
@@ -260,7 +256,7 @@ runs:
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_LIGHT_BLUE=$'\x1b[94m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
@@ -273,7 +269,7 @@ runs:
         while IFS=$'\r\n' read -r file; do
           printf "  %s\n" "${file}"
           ${tarProg} -vf "${{ inputs.tarball-name }}" --delete "${file}"
-        done <<<$(${tarProg} -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
+        done < <(${tarProg} -tf "${{ inputs.tarball-name }}" | grep -E '^\.|/\.')
         printf "::endgroup::\n"
 
     - name: List content of the generated tarball
@@ -288,7 +284,7 @@ runs:
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_LIGHT_BLUE=$'\x1b[94m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
         if [[ "${{ runner.os }}" == "macOS" ]]; then
@@ -331,7 +327,7 @@ runs:
         ANSI_LIGHT_RED=$'\x1b[91m'
         ANSI_LIGHT_GREEN=$'\x1b[92m'
         ANSI_LIGHT_YELLOW=$'\x1b[93m'
-        ANSI_LIGHT_BLUE="\e[94m"
+        ANSI_LIGHT_BLUE=$'\x1b[94m'
         ANSI_NOCOLOR=$'\x1b[0m'
 
         printf "%s" "Removing temporary tarball ... "
