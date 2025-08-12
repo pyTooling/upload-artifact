@@ -303,7 +303,7 @@ runs:
 
     # https://github.com/actions/upload-artifact
     - name: 📤 Upload artifact (tarball)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload
       if: inputs.mode == 'tar'
       with:
@@ -340,7 +340,7 @@ runs:
         fi
 
     - name: 📤 Upload artifact (legacy)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload-legacy
       if: inputs.mode == 'legacy'
       with:
