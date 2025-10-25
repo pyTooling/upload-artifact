@@ -29,8 +29,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -93,8 +93,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -128,8 +128,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -163,8 +163,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -200,8 +200,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -239,8 +239,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -276,8 +276,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -311,8 +311,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -349,8 +349,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -388,8 +388,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
@@ -427,8 +427,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -470,8 +470,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
 
     defaults:
       run:
