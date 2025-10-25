@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright © 2024 The pyTooling Authors
+# Copyright © 2025 The pyTooling Authors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -42,7 +42,7 @@ jobs:
       - uses: ./.github/actions/create-files
 
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release' with github action
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-release
@@ -105,7 +105,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file
@@ -140,7 +140,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file-in-directory
@@ -175,7 +175,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-directory
@@ -212,7 +212,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-triple-file-in-directory
@@ -251,7 +251,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
@@ -288,7 +288,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-directory
@@ -323,7 +323,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-directory
@@ -361,7 +361,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-unpredictable-wildcard
@@ -400,7 +400,7 @@ jobs:
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-nofile' with warning
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-nofile
@@ -435,7 +435,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-github-release
 
@@ -482,7 +482,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-pyTooling-release
 
