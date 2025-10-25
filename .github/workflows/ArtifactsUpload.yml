@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright © 2024 The pyTooling Authors
+# Copyright © 2025 The pyTooling Authors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -29,20 +29,20 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
 
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release' with github action
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-release
@@ -93,19 +93,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file
@@ -128,19 +128,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file-in-directory
@@ -163,19 +163,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-directory
@@ -200,19 +200,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-triple-file-in-directory
@@ -239,19 +239,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
@@ -276,19 +276,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-directory
@@ -311,19 +311,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-directory
@@ -349,19 +349,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-unpredictable-wildcard
@@ -388,19 +388,19 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
     defaults:
       run:
         shell: bash
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-nofile' with warning
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-nofile
@@ -427,15 +427,15 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-github-release
 
@@ -470,8 +470,8 @@ jobs:
       matrix:
         os:
           - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-14'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2022'}
+          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
 
     defaults:
       run:
@@ -479,10 +479,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-pyTooling-release
 
@@ -554,10 +554,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥 Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file
 
@@ -608,10 +608,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file-in-directory
 
@@ -664,10 +664,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-directory
 
@@ -720,10 +720,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-triple-file-in-directory
 
@@ -780,10 +780,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-deep-directory
 
@@ -832,10 +832,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-directory
 
@@ -888,10 +888,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-directory
 
@@ -954,10 +954,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-unpredictable-wildcard
 
@@ -1013,10 +1013,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-lib
 

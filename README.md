@@ -38,7 +38,7 @@ jobs:
   MyJob:
     steps:
       - name: 📤 Upload artifact 'binaries'
-        uses: pyTooling/upload-artifact@v4
+        uses: pyTooling/upload-artifact@v5
         with:
           name: binaries
           working-directory: build
@@ -47,7 +47,7 @@ jobs:
             lib
             
       - name: 📤 Upload artifact 'logfiles'
-        uses: pyTooling/upload-artifact@v4
+        uses: pyTooling/upload-artifact@v5
         with:
           name: logfiles
           path: |
@@ -145,7 +145,7 @@ To ensure files are extracted and assigned to the owner/group of the extracting 
 
 ## Dependencies
 
-* [actions/upload-artifact@v4](https://github.com/actions/upload-artifact)
+* [actions/upload-artifact@v5](https://github.com/actions/upload-artifact)
 
 
 ## Competing Actions
