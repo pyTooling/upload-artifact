@@ -1089,4 +1089,5 @@ jobs:
     with:
       version:  ${{ needs.Prepare.outputs.version }}
       auto_tag: ${{ needs.Prepare.outputs.is_release_commit }}
+      workflow: 'ArtifactUpload.yml'
     secrets: inherit
