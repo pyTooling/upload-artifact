@@ -21,6 +21,9 @@ on:
   workflow_dispatch:
 
 jobs:
+  Prepare:
+    uses: pyTooling/Actions/.github/workflows/PrepareJob.yml@r6
+
   Build:
     name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
@@ -339,7 +342,6 @@ jobs:
           path: |
             bin
             lib
-
 
   Build-unpredictable-wildcard:
     name: ${{ matrix.os.icon }} Build unpredictable-wildcard on ${{ matrix.os.name }} - Upload artifact
@@ -1040,3 +1042,27 @@ jobs:
             gui/main.py
           unexpected-files: |
             .library
+
+  TriggerTaggedRelease:
+    uses: pyTooling/Actions/.github/workflows/TagReleaseCommit.yml@r6
+    needs:
+      - Prepare
+      - Verify-Github
+      - Verify-pyTooling
+      - Inspect-single-file
+      - Inspect-single-file-in-directory
+      - Inspect-double-file-in-directory
+      - Inspect-triple-file-in-directory
+      - Inspect-double-file-in-deep-directory
+      - Inspect-single-directory
+      - Inspect-double-directory
+      - Inspect-unpredictable-wildcard
+      - Verify-9
+    if: needs.Prepare.outputs.is_release_commit == 'true' && github.event_name != 'schedule'
+    permissions:
+      contents: write  # required for create tag
+      actions:  write  # required for trigger workflow
+    with:
+      version:  ${{ needs.Prepare.outputs.version }}
+      auto_tag: ${{ needs.Prepare.outputs.is_release_commit }}
+    secrets: inherit
