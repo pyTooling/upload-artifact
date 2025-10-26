@@ -553,7 +553,7 @@ jobs:
 
       - name: 📋 Verify file permissions
         uses: ./.github/actions/file-is-executable
-        if: matrix.os.name != 'Windows'
+        if: matrix.os.name != 'Windows' && matrix.os.name != 'Windows ARM'
         with:
           files: |
             bin/program.py
