@@ -1071,6 +1071,7 @@ jobs:
     uses: pyTooling/Actions/.github/workflows/TagReleaseCommit.yml@r6
     needs:
       - Prepare
+      - Build-no-files
       - Verify-Github
       - Verify-pyTooling
       - Inspect-single-file
@@ -1089,7 +1090,7 @@ jobs:
     with:
       version:  ${{ needs.Prepare.outputs.version }}
       auto_tag: ${{ needs.Prepare.outputs.is_release_commit }}
-      workflow: 'ArtifactUpload.yml'
+      workflow: 'ArtifactsUpload.yml'
     secrets: inherit
 
   PullRequest:
@@ -1097,6 +1098,7 @@ jobs:
     runs-on: 'ubuntu-24.04'
     needs:
       - Prepare
+      - Build-no-files
       - Verify-Github
       - Verify-pyTooling
       - Inspect-single-file
