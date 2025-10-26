@@ -31,9 +31,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -95,9 +97,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -130,9 +134,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -165,9 +171,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -202,9 +210,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -241,9 +251,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -278,9 +290,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -313,9 +327,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -350,9 +366,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -389,9 +407,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
     defaults:
       run:
         shell: bash
@@ -428,9 +448,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
 
     steps:
       - name: ⏬ Checkout repository to use local actions
@@ -471,9 +493,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
-          - {icon: '🍏', name: 'macOS',   image: 'macos-15'    }
-          - {icon: '🪟', name: 'Windows', image: 'windows-2025'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
+          - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
+          - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
 
     defaults:
       run:
@@ -529,7 +553,7 @@ jobs:
 
       - name: 📋 Verify file permissions
         uses: ./.github/actions/file-is-executable
-        if: matrix.os.name != 'Windows'
+        if: matrix.os.name != 'Windows' && matrix.os.name != 'Windows ARM'
         with:
           files: |
             bin/program.py
@@ -1065,4 +1089,53 @@ jobs:
     with:
       version:  ${{ needs.Prepare.outputs.version }}
       auto_tag: ${{ needs.Prepare.outputs.is_release_commit }}
+      workflow: 'ArtifactUpload.yml'
     secrets: inherit
+
+  PullRequest:
+    name: Create Pull-Request
+    runs-on: 'ubuntu-24.04'
+    needs:
+      - Prepare
+      - Verify-Github
+      - Verify-pyTooling
+      - Inspect-single-file
+      - Inspect-single-file-in-directory
+      - Inspect-double-file-in-directory
+      - Inspect-triple-file-in-directory
+      - Inspect-double-file-in-deep-directory
+      - Inspect-single-directory
+      - Inspect-double-directory
+      - Inspect-unpredictable-wildcard
+      - Verify-9
+    if: needs.Prepare.outputs.is_release_tag == 'true'
+    permissions:
+      contents: write
+      actions:  write
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Create Pull-Request
+        run: |
+          set +e
+
+          ANSI_LIGHT_RED=$'\x1b[91m'
+          ANSI_LIGHT_GREEN=$'\x1b[92m'
+          ANSI_LIGHT_YELLOW=$'\x1b[93m'
+          ANSI_LIGHT_BLUE=$'\x1b[94m'
+          ANSI_NOCOLOR=$'\x1b[0m'
+
+          export GH_TOKEN=${{ github.token }}
+
+          title="Update v6 from ${{ needs.Prepare.outputs.version }}"
+
+          printf "Creating pull-request '${title}' ... "
+          gh pr create --title "${title}" --body "Auto generated"
+          if [[ $? -eq 0 ]]; then
+              printf "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}\n"
+          else
+            printf "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}\n"
+            printf "::error title=%s::%s\n" "GitHub PullRequest API" "Couldn't create pull-request."
+          fi
