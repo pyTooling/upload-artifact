@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright © 2024 The pyTooling Authors
+# Copyright © 2025 The pyTooling Authors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -303,7 +303,7 @@ runs:
 
     # https://github.com/actions/upload-artifact
     - name: 📤 Upload artifact (tarball)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload
       if: inputs.mode == 'tar'
       with:
@@ -340,7 +340,7 @@ runs:
         fi
 
     - name: 📤 Upload artifact (legacy)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload-legacy
       if: inputs.mode == 'legacy'
       with:
