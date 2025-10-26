@@ -1119,6 +1119,12 @@ jobs:
         shell: bash
 
     steps:
+      - name: ⏬ Checkout repository
+        uses: actions/checkout@v5
+        with:
+          # The command 'git describe' (used for version) needs the history.
+          fetch-depth: 0
+
       - name: Create Pull-Request
         run: |
           set +e
