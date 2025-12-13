@@ -42,12 +42,12 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
 
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-release' with github action
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-release
@@ -108,11 +108,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file
@@ -145,11 +145,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-file-in-directory
@@ -182,11 +182,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-directory
@@ -221,11 +221,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-triple-file-in-directory
@@ -262,11 +262,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-file-in-deep-directory
@@ -301,11 +301,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-single-directory
@@ -338,11 +338,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-double-directory
@@ -377,11 +377,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-unpredictable-wildcard
@@ -418,11 +418,11 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-nofile' with warning
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ${{ matrix.os.name }}-github-nofile
@@ -456,10 +456,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-github-release
 
@@ -505,10 +505,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥 Download artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-pyTooling-release
 
@@ -580,10 +580,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥 Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file
 
@@ -634,10 +634,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-file-in-directory
 
@@ -690,10 +690,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-directory
 
@@ -746,10 +746,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-triple-file-in-directory
 
@@ -806,10 +806,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-file-in-deep-directory
 
@@ -858,10 +858,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-single-directory
 
@@ -914,10 +914,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-double-directory
 
@@ -980,10 +980,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-unpredictable-wildcard
 
@@ -1039,10 +1039,10 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: ${{ matrix.os.name }}-${{ matrix.task.artifact }}-lib
 
@@ -1120,7 +1120,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # The command 'git describe' (used for version) needs the history.
           fetch-depth: 0
