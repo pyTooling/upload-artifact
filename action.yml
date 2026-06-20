@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright © 2025 The pyTooling Authors
+# Copyright © 2026 The pyTooling Authors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -35,7 +35,7 @@ inputs:
     default: ''
   path:
     description: |
-      A file, directory or wildcard pattern that describes what to upload
+      A file, directory or wildcard pattern that describes what to upload.
     type: string
     required: true
   if-no-files-found:

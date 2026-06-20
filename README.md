@@ -171,7 +171,7 @@ rcdailey/download-tar-action.yml](https://gist.github.com/rcdailey/cd3437bb2c636
 
 ## License
 
-This GitHub Composite Action (source code) licensed under [The MIT License](LICENSE.md).
+This GitHub Composite Action (source code) is licensed under [The MIT License](LICENSE.md).
 
 ---
 
