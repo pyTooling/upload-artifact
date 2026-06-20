@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright © 2025 The pyTooling Authors
+# Copyright © 2026 The pyTooling Authors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -31,8 +31,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
 
@@ -97,8 +97,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -108,7 +108,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file'
@@ -134,8 +134,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-file-in-directory'
@@ -171,8 +171,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -182,7 +182,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-directory'
@@ -210,8 +210,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -221,7 +221,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-triple-file-in-directory'
@@ -251,8 +251,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -262,7 +262,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-file-in-deep-directory'
@@ -290,8 +290,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -301,7 +301,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-single-directory'
@@ -327,8 +327,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -338,7 +338,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-double-directory'
@@ -366,8 +366,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -377,7 +377,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-unpredictable-wildcard'
@@ -407,8 +407,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -418,7 +418,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - uses: ./.github/actions/create-files
       - name: 📤 Upload artifact '${{ matrix.os.name }}-github-nofile' with warning
@@ -448,15 +448,15 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥 Download artifact
         uses: actions/download-artifact@v8
@@ -493,8 +493,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-24.04'    }
-          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-24.04-arm'}
+          - {icon: '🐧', name: 'Ubuntu',      image: 'ubuntu-26.04'    }
+          - {icon: '⛄', name: 'Ubuntu ARM',  image: 'ubuntu-26.04-arm'}
           - {icon: '🍏', name: 'macOS',       image: 'macos-15'        }
           - {icon: '🪟', name: 'Windows',     image: 'windows-2025'    }
           - {icon: '🏢', name: 'Windows ARM', image: 'windows-11-arm'  }
@@ -505,7 +505,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥 Download artifact
         uses: actions/download-artifact@v8
@@ -570,7 +570,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -580,7 +580,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥 Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -624,7 +624,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -634,7 +634,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -680,7 +680,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -690,7 +690,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -736,7 +736,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -746,7 +746,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -796,7 +796,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -806,7 +806,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -848,7 +848,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'inspect', artifact: 'github',    action: 'actions/upload-artifact'}
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
@@ -858,7 +858,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -914,7 +914,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -980,7 +980,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -1023,14 +1023,14 @@ jobs:
 
   Verify-9:
     name: Verify lib directory
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs:
       - Build
     strategy:
       fail-fast: false
       matrix:
         os:
-          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-24.04'}
+          - {icon: '🐧', name: 'Ubuntu',  image: 'ubuntu-26.04'}
         task:
           - {name: 'verify' , artifact: 'pyTooling', action: 'pyTooling/upload-artifact'}
     defaults:
@@ -1039,7 +1039,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository to use local actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 📥  Download artifact uploaded via '${{ matrix.task.action }}'
         uses: actions/download-artifact@v8
@@ -1095,7 +1095,7 @@ jobs:
 
   PullRequest:
     name: Create Pull-Request
-    runs-on: 'ubuntu-24.04'
+    runs-on: 'ubuntu-26.04'
     needs:
       - Prepare
       - Build-no-files
@@ -1120,7 +1120,7 @@ jobs:
 
     steps:
       - name: ⏬ Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # The command 'git describe' (used for version) needs the history.
           fetch-depth: 0
