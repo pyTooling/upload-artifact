@@ -24,6 +24,10 @@ jobs:
   Prepare:
     uses: pyTooling/Actions/.github/workflows/PrepareJob.yml@r7
 
+  # '@dev' until pyTooling/Actions releases these two templates; then '@r8' like the rest.
+  Marketplace:
+    uses: pyTooling/Actions/.github/workflows/CheckMarketplaceMetadata.yml@dev
+
   Build:
     name: ${{ matrix.os.icon }} Build 1 on ${{ matrix.os.name }} - Upload artifact
     runs-on: ${{ matrix.os.image }}
@@ -1071,6 +1075,7 @@ jobs:
     uses: pyTooling/Actions/.github/workflows/TagReleaseCommit.yml@r7
     needs:
       - Prepare
+      - Marketplace
       - Build-no-files
       - Verify-Github
       - Verify-pyTooling
@@ -1093,11 +1098,11 @@ jobs:
       workflow: 'ArtifactsUpload.yml'
     secrets: inherit
 
-  PullRequest:
-    name: Create Pull-Request
-    runs-on: 'ubuntu-26.04'
+  UpdateVersionBranch:
+    uses: pyTooling/Actions/.github/workflows/UpdateVersionBranch.yml@dev
     needs:
       - Prepare
+      - Marketplace
       - Build-no-files
       - Verify-Github
       - Verify-pyTooling
@@ -1112,38 +1117,8 @@ jobs:
       - Verify-9
     if: needs.Prepare.outputs.is_release_tag == 'true'
     permissions:
-      contents: write
-      actions:  write
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: ⏬ Checkout repository
-        uses: actions/checkout@v7
-        with:
-          # The command 'git describe' (used for version) needs the history.
-          fetch-depth: 0
-
-      - name: Create Pull-Request
-        run: |
-          set +e
-
-          ANSI_LIGHT_RED=$'\x1b[91m'
-          ANSI_LIGHT_GREEN=$'\x1b[92m'
-          ANSI_LIGHT_YELLOW=$'\x1b[93m'
-          ANSI_LIGHT_BLUE=$'\x1b[94m'
-          ANSI_NOCOLOR=$'\x1b[0m'
-
-          export GH_TOKEN=${{ github.token }}
-
-          title="Update v6 from ${{ needs.Prepare.outputs.version }}"
-
-          printf "Creating pull-request '${title}' ... "
-          gh pr create --title "${title}" --body "Auto generated"
-          if [[ $? -eq 0 ]]; then
-              printf "${ANSI_LIGHT_GREEN}[OK]${ANSI_NOCOLOR}\n"
-          else
-            printf "${ANSI_LIGHT_RED}[FAILED]${ANSI_NOCOLOR}\n"
-            printf "::error title=%s::%s\n" "GitHub PullRequest API" "Couldn't create pull-request."
-          fi
+      contents:      write   # required to create a version branch
+      pull-requests: write   # required to open the pull-request
+    with:
+      version: ${{ needs.Prepare.outputs.version }}
+      major:   '7'
